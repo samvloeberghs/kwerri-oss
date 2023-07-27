@@ -1,0 +1,101 @@
+{
+  "name": "samvloeberghs.be",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "kwerri-oss",
+  "sourceRoot": "apps/samvloeberghs.be/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/samvloeberghs.be",
+        "index": "apps/samvloeberghs.be/src/index.html",
+        "main": "apps/samvloeberghs.be/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/samvloeberghs.be/tsconfig.app.json",
+        "assets": [
+          "apps/samvloeberghs.be/src/favicon.ico",
+          "apps/samvloeberghs.be/src/assets"
+        ],
+        "styles": ["apps/samvloeberghs.be/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "samvloeberghs.be:build:production"
+        },
+        "development": {
+          "browserTarget": "samvloeberghs.be:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "samvloeberghs.be:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/samvloeberghs.be/**/*.ts",
+          "apps/samvloeberghs.be/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/samvloeberghs.be/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "samvloeberghs.be:build"
+      }
+    }
+  }
+}
