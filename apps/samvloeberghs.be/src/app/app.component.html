@@ -1,1 +1,167 @@
-<kwerri-oss-nx-welcome></kwerri-oss-nx-welcome>
+<div class="app">
+  <aside [class.app__aside--open]="mobileNavToggled" class="app__aside">
+
+    <a routerLink="/" class="app__picture" title="To homepage">
+      <img src="/assets/samvloeberghs.jpg" alt="Sam Vloeberghs"/>
+    </a>
+
+    <a class="app__new-version-available-msg" href="#" (click)="$event.preventDefault()">
+      <span>New version available!</span>
+      <span>Reload the page please</span>
+    </a>
+
+    <h1>
+      <a routerLink="/">Sam Vloeberghs</a>
+    </h1>
+
+    <a routerLink="/" class="app__mobilemenu" target="navigation" title="Open mobile navigation"
+       [class.app__mobilemenu--open]="mobileNavToggled"
+       (click)="toggleMobileNav($event, true)">
+      <span class="app__mobilemenu-close">Close navigation</span>
+      <span class="app__mobilemenu-open">Open navigation</span>
+    </a>
+
+    <a class="app__scrolltocontent" href="{{currentUrl$ | async}}#content">
+      Scroll down to content
+    </a>
+
+    <div class="app__mobilenavcontainer">
+      <p>
+        I'm a Belgium 🇧🇪 based freelance software engineer and Internet entrepreneur, currently focusing on
+        frontend technologies.
+      </p>
+
+      <ul class="app__social">
+        <li>
+          <a href="https://www.facebook.com/sam.vloeberghs"
+             class="facebook ignoreexternal"
+             title="Sam on Facebook"
+             target="_blank"
+             rel="noopener"
+             aria-label="Sam on Facebook">
+            Facebook
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/samvloeberghs"
+             class="twitter ignoreexternal"
+             title="Sam on Twitter"
+             target="_blank"
+             rel="noopener"
+             aria-label="Sam on Twitter">
+            Twitter
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/samvloeberghs"
+             class="github ignoreexternal"
+             title="Sam on Github"
+             target="_blank"
+             rel="noopener"
+             aria-label="Sam on Github">
+            Github
+          </a>
+        </li>
+        <li>
+          <a href="skype:sam.vloeberghs"
+             class="skype ignoreexternal"
+             title="Sam on Skype"
+             target="_blank"
+             rel="noopener"
+             aria-label="Sam on Skype">
+            Skype
+          </a>
+        </li>
+        <li>
+          <a href="https://be.linkedin.com/in/samvloeberghs"
+             class="linkedin ignoreexternal"
+             title="Sam on LinkedIn"
+             target="_blank"
+             rel="noopener"
+             aria-label="Sam on LinkedIn">
+            LinkedIn
+          </a>
+        </li>
+        <li>
+          <a href="http://stackoverflow.com/users/288606/sam-vloeberghs"
+             class="stack-overflow ignoreexternal"
+             title="Sam on Stack Overflow"
+             target="_blank"
+             rel="noopener"
+             aria-label="Sam on Stack Overflow">
+            Stack Overflow
+          </a>
+        </li>
+        <li>
+          <a href="https://developers.google.com/profile/u/110028666144308235414"
+             class="gde ignoreexternal"
+             title="Sam on GDE directory"
+             target="_blank"
+             rel="noopener"
+             aria-label="Sam on Google Developers directory">
+            Google Developers Experts
+          </a>
+        </li>
+      </ul>
+
+      <nav class="app__nav">
+        <ol>
+          <li>
+            <a routerLink="/" routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: true}"
+               (click)="navigateMobile()">
+              Home
+            </a>
+          </li>
+          <li>
+            <a routerLink="/posts" routerLinkActive="active"
+               (click)="navigateMobile()">
+              Posts
+            </a>
+          </li>
+          <li>
+            <a routerLink="/talks-workshops" routerLinkActive="active"
+               (click)="navigateMobile()">
+              Talks &amp; workshops
+            </a>
+          </li>
+          <li>
+            <a routerLink="/projects" routerLinkActive="active"
+               (click)="navigateMobile()">
+              Projects
+            </a>
+          </li>
+          <li>
+            <a routerLink="/about" routerLinkActive="active"
+               (click)="navigateMobile()">
+              About me
+            </a>
+          </li>
+          <li>
+            <a routerLink="/kwerri" routerLinkActive="active"
+               (click)="navigateMobile()">
+              Kwerri
+            </a>
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+  </aside>
+
+  <section class="app__content" id="content">
+
+    <router-outlet></router-outlet>
+    <footer class="app__footer">
+      <p>
+        &copy; 1988 - {{today | date: 'yyyy'}} &mdash; Sam Vloeberghs &mdash; This website, how it's coded and the
+        software it uses is
+        all open-source. So <a href="https://github.com/samvloeberghs/kwerri-oss" target="_blank" rel="noopener">feel
+        free to be inspired and copy the architecture</a>. The design & the content however, like for
+        example the written articles, are my own thoughts and inspiration. Please reference the relevant page if you use
+        (parts of) it.
+      </p>
+    </footer>
+
+  </section>
+</div>

@@ -1,0 +1,58 @@
+sv-home {
+  display: block;
+}
+
+.home {
+  &__lastpost {
+    color: #222;
+    font-weight: 400;
+    text-decoration: none;
+    background: #f6f6f6;
+    padding: 10px 20px;
+    margin: {
+      bottom: 40px;
+    }
+    display: flex;
+
+
+    @media (max-width: 480px) {
+      margin: {
+        bottom: 30px;
+      }
+    }
+
+    &-image {
+      display: block;
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      margin: {
+        right: 10px;
+      }
+    }
+
+    &-latest {
+      font-weight: bold;
+      min-width: 120px;
+      padding: {
+        right: 10px;
+      }
+      line-height: 30px;
+      font-size: 20px;
+
+      @media (max-width: 480px) {
+        display: none;
+      }
+    }
+
+    &-post {
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 30px;
+      font-size: 20px;
+    }
+  }
+
+}

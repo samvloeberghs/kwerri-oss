@@ -1,0 +1,476 @@
+<section class="entry-content post-body" itemprop="articleBody">
+
+  <h2 id="introduction" title="Introduction">Scully - a Static Site Generator for Angular series</h2>
+
+  <p>
+    This article is part of <em>a growing series about Scully - a Static Site Generator for Angular</em>.
+    If you get excited about this article be sure to check the others!
+  </p>
+
+  <ol>
+    <li>
+      <a href="posts/custom-plugins-for-scully-angular-static-site-generator">
+        Custom plugins for Scully - Angular Static Site Generator
+      </a>
+    </li>
+    <li>
+      <a href="posts/disabling-angular-when-statically-generating-with-scully">
+        Disabling Angular when statically generating with Scully
+      </a>
+    </li>
+    <li>
+      <a href="posts/scully-or-angular-universal-what-is-the-difference">
+        Scully or Angular Universal, what is the difference?
+      </a>
+    </li>
+    <li>
+      Scully and Angular Universal, comparing benchmarks
+    </li>
+  </ol>
+
+  <h2 id="target-audience">Target audience</h2>
+
+  <p>
+    This post is a follow-up on my previous post about
+    <a href="posts/scully-or-angular-universal-what-is-the-difference" target="_blank">the differences between Angular
+      Universal and Scully</a>. In that post I mentioned that Universal can be much faster in the (pre)rendering process
+    compared to Scully. <strong>This difference is mainly significant and noticeable in the order of thousands of pages
+    and more as we will show.</strong>
+  </p>
+  <p>
+    When building and maintaining a large website, for example a business directory, <strong>where rerenders are often
+    necessary, this can become very important</strong>. If it takes an hour or more to prerender all the pages the data
+    might have changed again before the process ended. So let's see how both technologies behave on the same
+    application and come up with the actual metrics!
+  </p>
+
+  <p class="alert alert--warning">
+    <strong>Important:</strong> This post is not intented to break down or bash any of the 2 technologies. I love both
+    of them very much and I believe they both have their use case! As a good software engineer you should always try
+    to make the best and informed decisions about technology choices, especially if you can base those decisions
+    on simple benchmarks!
+  </p>
+
+  <h2 id="example-application">Example application</h2>
+
+  <p>
+    The example application used for the benchmarks is a simple Angular application, in an Nx monorepo, that has a home
+    route, a news overview route and news detail route. The news functionality is loaded via a lazy-loaded angular
+    module. You can <a href="https://github.com/samvloeberghs/scully-universal" target="_blank" rel="noopener">find the
+    repository here to play with the setup and try your own scenarios</a>.
+  </p>
+
+  <img class="extraspace"
+       src="/assets/post-data/scully-and-angular-universal-comparing-benchmarks/scully-universal-example-app.gif"
+       alt="Scully - Universal - Example app"/>
+
+  <p class="alert alert--info">
+    Due to the different implementation details of Universal and Scully the application was build twice, but with the
+    same structural setup, markup and styles. This means the code is not completely identical; the only difference is
+    the injection of the <code>ScullyLibModule</code> in the Scully application. This difference should not have a
+    significant influence on the test results.
+  </p>
+
+  <h2 id="benchmarking-details">Benchmarking details</h2>
+
+  <h3 id="test-cases">Test cases</h3>
+
+  <p>
+    Scully and Universal will prerender all the pages that are available on the application. These pages include the
+    <a href="https://www.npmjs.com/package/guess-parser" target="_blank" rel="noopener">auto-discovered pages</a> and
+    the list of pages that is generated based on the available news data. For Scully, the list of dynamic pages is
+    created using <a href="/posts/custom-plugins-for-scully-angular-static-site-generator/#custom-router-plugin" target="_blank">
+    a custom routerPlugin</a>. For Universal we used a node script. The result is the same.
+  </p>
+
+  <p>
+    The HTML render-output will be minified using
+    <code><a href="https://www.npmjs.com/package/html-minifier" target="_blank" rel="noopener">html-minifier</a></code>.
+    The dynamic data, that is loaded on the news overview and detail pages, is inlined in the HTML.
+  </p>
+
+  <p>
+    We will monitor the time it takes for rendering 100, 1,000 (one thousand) and 10,000 (ten thousand) news detail
+    pages with Scully and Universal. Each testcase will be done 3 times and the average of those will be used as the
+    final result.
+  </p>
+
+  <h3 id="system-environment">System environment</h3>
+
+  <p>
+    The benchmarks were executed on my own device, and after a reboot. For reference, here are the system details:
+  </p>
+  <ul>
+    <li>MBPro 15inch 2018, 2.9Ghz 6core Intel Core i9</li>
+    <li>RAM: 32 GB 2400 Mhz DDR4</li>
+    <li>Graphics: Radeon Pro 560x 4GB & Intel UHD Graphics 640 1536 MB</li>
+  </ul>
+
+  <h3 id="monitoring-tools-measuring-metrics">Monitoring tools and measuring metrics</h3>
+
+  <ul>
+    <li>
+      The execution time is monitored with
+      <a href="https://www.npmjs.com/package/gnomon" target="_blank" rel="noopener">gnomon</a>
+    </li>
+    <li>
+      The payload is measured with Chrome Devtools > Network
+    </li>
+  </ul>
+
+  <h3 id="running-the-tests">Running the tests</h3>
+
+  <h4>Universal</h4>
+
+  <p>
+    We have to serve the application (line 1) while the prerender process is ongoing to be able to load the data for the
+    news overview and detail pages. In a separate terminal (line 3) we group the prerendering and minification process
+    and pipe it to the <code>gnomon</code> command to measure the execution time.
+  </p>
+
+  <pre><code class="language-bash line-numbers">npx nx serve universal
+# parallel terminal
+( npm run prerender:universal && npm run minify:universal ) | npx gnomon
+</code></pre>
+
+  <h4>Scully</h4>
+
+  <p>
+    The same is true for Scully, the data needs to be available so we serve the application in a separate terminal
+    (line 1). In the other terminal (line 3) we first do a clean <code>--prod</code> build of the application as the
+    Universal process also starts with a clean build. We pass the option <code>--scanRoutes</code> to start with and
+    force a clean route discovery process. The final configuration option defines the location of the config file for
+    Scully.
+  </p>
+
+  <pre><code class="language-bash line-numbers">npx nx serve scully
+# parallel terminal
+( npx nx build scully --prod && npx scully --scanRoutes --configFile .scully/scully.scully.config.js ) | npx gnomon
+</code></pre>
+
+  <p class="alert alert--info">
+    To avoid setting up an API server for this test, I have used <code>news-100.json</code> to represent 100 entries in
+    JSON data, <code>news-1000.json</code> for 1,000 entries and <code>news-10000.json</code> for 10,000 entries. For
+    testing the different amount of pages we need to modify the reference to <code>news-100.json</code> in the
+    <code>scully.scully.config.js</code>, the <code>overview.component.ts</code> and <code>generate-routes.ts</code>
+    files.
+  </p>
+
+  <h2 id="benchmark-results">Benchmark results</h2>
+
+  <h3 id="execution-time">Execution time</h3>
+
+  <p>
+    The first table shows the results for the execution time of the prerendering process of both technologies.
+  </p>
+
+  <table class="post__benchmark-results">
+    <thead>
+    <tr>
+      <th>Execution time</th>
+      <td>Scully (time)</td>
+      <td>Angular Universal (time)</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th>
+        100 newsitems<br/>
+        <span>(103 pages)</span>
+      </th>
+      <td>
+        <ol>
+          <li>21.3256s</li>
+          <li>23.1978s</li>
+          <li>22.9150s</li>
+        </ol>
+        <strong>AVG:</strong> 22.48s
+      </td>
+      <td>
+        <ol>
+          <li>20.2783s</li>
+          <li>18.6448s</li>
+          <li>19.3353s</li>
+        </ol>
+        <strong>AVG:</strong> 19.42s
+      </td>
+    </tr>
+    <tr>
+      <th>
+        1,000 newsitems<br/>
+        <span>(1,003 pages)</span>
+      </th>
+      <td>
+        <ol>
+          <li>80.2675s</li>
+          <li>81.8941s</li>
+          <li>83.0996s</li>
+        </ol>
+        <strong>AVG:</strong> 81.75s<br/>
+        = 1min 21.75s
+      </td>
+      <td>
+        <ol>
+          <li>23.5942s</li>
+          <li>24.4074s</li>
+          <li>24.8957s</li>
+        </ol>
+        <strong>AVG:</strong> 24.30s
+      </td>
+    </tr>
+    <tr>
+      <th>
+        10,000 newsitems<br/>
+        <span>(10,003 pages)</span>
+      </th>
+      <td>
+        <ol>
+          <li>738.8358s</li>
+          <li>750.9914s</li>
+          <li>750.1917s</li>
+        </ol>
+        <strong>AVG:</strong> 746.67s<br/>
+        = 9min 26.67s
+      </td>
+      <td>
+        <ol>
+          <li>55.1253s</li>
+          <li>55.0127s</li>
+          <li>56.8955s</li>
+        </ol>
+        <strong>AVG:</strong> 55.68s
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <img class="extraspace"
+       src="/assets/post-data/scully-and-angular-universal-comparing-benchmarks/comparing-graph.png"
+       alt="Scully - Universal - Comparing Graph"/>
+
+  <h3 id="asset-html-sizes">Asset and HTML page sizes</h3>
+
+  <p>
+    The second table shows an overview of the sizes of the generated <code>index.html</code> files and the total of
+    assets loaded when requesting a specific page that bootstraps the Angular application on pageload.
+  </p>
+
+  <table class="post__benchmark-results">
+    <thead>
+    <tr>
+      <th>Asset / page size</th>
+      <td>Scully (kb)</td>
+      <td>Angular Universal (kb)</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th><span>home</span> (index.html)</th>
+      <td>
+        3.2kb
+      </td>
+      <td>
+        3.1kb
+      </td>
+    </tr>
+    <tr>
+      <th><span>home</span> (all assets)</th>
+      <td>
+        328kb
+      </td>
+      <td>
+        312kb
+      </td>
+    </tr>
+    <tr>
+      <th><span>news/overview</span> (index.html)</th>
+      <td>
+        12.6kb
+      </td>
+      <td>
+        11.8kb
+      </td>
+    </tr>
+    <tr>
+      <th><span>news/overview</span> (all assets)</th>
+      <td>
+        341kb
+      </td>
+      <td>
+        330kb
+      </td>
+    </tr>
+    <tr>
+      <th><span>news/detail</span> (index.html)</th>
+      <td>
+        23.6kb
+      </td>
+      <td>
+        23.5kb
+      </td>
+    </tr>
+    <tr>
+      <th><span>news/detail</span> (all assets)</th>
+      <td>
+        353kb
+      </td>
+      <td>
+        343kb
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h3 id="general-findings">General findings</h3>
+
+  <p>
+    Before we dive into the comparison of the metrics of the different technologies and test-cases, let's first discuss
+    some import findings and things to consider.
+  </p>
+
+  <ul>
+    <li>
+      Execution time will be influenced by other processes running. If you can run the process on a clean and isolated
+      node it will give the most stable results.
+    </li>
+    <li>
+      <strong>The HTML minification process for the Univeral prerendering process can be considered as sub-optimal.
+      </strong> There is currently no easy way to directly hook into the process. So we need a separate post-process
+      that will do a read and write operation for minifying each HTML file.
+    </li>
+    <li>
+      Both technologies allow for more <strong>smart rerendering</strong> of the prerendered pages. You can build smart
+      systems that will only prerender a part of your application, or even only one specific page, after data changes.
+      You will always need an initial prerendering of all pages.
+    </li>
+  </ul>
+
+  <h3 id="comparing-the-metrics">Comparing the metrics</h3>
+
+  <ul>
+    <li>
+      <strong>Universal is notably faster</strong>, but in the order of 100 pages the differences are neglectable.
+      For around 1,000 pages the execution time for Scully triples compared to Universal. For 10,000 of pages Universal
+      is a factor ~10 faster.
+    </li>
+    <li>
+      Using <strong>Scully adds around 10kb to the total asset size</strong> of the Angular application. 10kb is not
+      little, but with around 1/30 of the total asset size of a very basic application I do no consider this to be
+      significant.
+    </li>
+  </ul>
+
+  <h2 id="how-to-optimize-scully">How to optimize Scully</h2>
+
+  <p>
+    Scully is still in alpha, nearing their first beta release and there will probably follow more internal
+    optimizations. However, Scully, using Puppeteer, will never be able to perform as optimal and fast as Universal.
+    Let's explore <strong>other ways and techniques to optimize Scully</strong>.
+  </p>
+
+  <h3 id="limiting-the-to-render-list-of-pages">Limit the to-render list of pages</h3>
+
+  <p>
+    If your application has a lot of pages you definitely need strategies that will only rerender specific pages when
+    your content changes. These algorithms can be build in
+    <a href="posts/custom-plugins-for-scully-angular-static-site-generator" target="_blank">your own custom router
+      plugin</a>. You could for example query a service that will only give back the changed identifiers since a given
+    datetime. That way <strong>your list of to render routes will be limited to the updated pages</strong>.
+  </p>
+
+  <p>
+    Another but related technique to the strategy described above is the use of the <code>--baseFilter</code> option. If
+    this option is specified only the routes that start with this prefix are taken into account. This way you can
+    <strong>prerender only a part of your application routing-tree</strong>.
+  </p>
+
+  <h3 id="disable-specific-resource-types">Disable specific resource types</h3>
+
+  <p>
+    Using the option <code>--ignoreResourceTypes</code> we can block specific request to
+    <a href="https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/puppeteer/v2/index.d.ts#L939">resources</a>
+    from happening in Puppeteer when our pages get rendered. This might only slightly decrease the prerendering execution
+    time but <strong>potentially dramatically decrease the amounts of data that is loaded</strong> during prerendering.
+    The following configuration will block all image, other media, font and stylesheet resources from being loaded.
+  </p>
+
+  <h4 class="codetitle">scully.&lt;your-project-name&gt;.config.js</h4>
+  <pre><code class="language-js line-numbers">exports.config = {
+    projectRoot: "./apps/&lt;your-project-name&gt;/src",
+    projectName: "&lt;your-project-name&gt;",
+    outDir: './dist/apps/&lt;your-project-name&gt;-static',
+    ignoreResourceTypes: [
+      'image',
+      'media',
+      'font',
+      'stylesheet'
+    ]
+};</code></pre>
+
+  <h2 id="conclusion">Conclusion</h2>
+
+  <p>
+    <strong>Please don't take my writings for granted on this and don't use these metrics for your project</strong>. The
+    example application is far from a real-world application, but the concepts and benchmarking process explained can
+    easily be applied on your own use-case. <strong>Adding 3rd party libraries or loading a content-heavy and/or
+    functionality-heavy page might yield completely different results</strong>. If you are willing to share your
+    benchmarking results I would be very happy! :)
+  </p>
+
+  <p>
+    One thing is for sure though.. If you implement Universal, the prerendering process time will dramaticaly decrease
+    (<em>read: be faster</em>) if you are generating pages in amounts of 1000+. If your content is highly volatile but
+    you want to keep benefiting from prerendering, consider implementing Universal or at least <strong>apply smart
+    rerendering strategies</strong> for your Scully powered application when data changes.
+  </p>
+
+  <p>
+    <strong>Just because these tests showed that Scully becomes slow in a higher order of amounts of pages, in this
+      particular example application, doesn't mean it's bad at what it does</strong>. Scully solves other problems and
+    the time/money you might invest on adding Universal support might be more then the extra build and render time
+    Scully introduces.
+  </p>
+
+  <p>
+    <strong>Choose wisely and consider all aspects!</strong> The Scully team is working hard to keep improving. If you
+    want more advice on the Scully vs Angular Universal debate, check my other blogpost on
+    <a href="posts/scully-or-angular-universal-what-is-the-difference" target="_blank">the differences between Scully
+      and Universal</a>. Thanks for reading!
+  </p>
+
+  <h2 id="further-reading">Further reading</h2>
+
+  <ol class="post__further-reading">
+    <li>
+      <a href="https://github.com/scullyio" target="_blank" rel="noopener">
+        Scully - Github organization
+      </a>
+    </li>
+    <li>
+      <a href="https://angular.io/guide/universal" target="_blank" rel="noopener">
+        Server-side rendering (SSR) with Angular Universal
+      </a>
+    </li>
+    <li>
+      <a href="https://www.npmjs.com/package/scully-plugin-minify-html" target="_blank" rel="noopener">
+        Minify the HTML of your prerendered Angular application - Scully plugin
+      </a>
+    </li>
+    <li>
+      <a href="https://www.npmjs.com/package/guess-parser" target="_blank" rel="noopener">
+        Guess parser
+      </a>
+    </li>
+  </ol>
+
+  <h2 id="special-thanks-to">Special thanks to</h2>
+
+  <ul>
+    <li>
+      <a href="https://twitter.com/leonelngande" rel="noopener" target="_blank">Leonel Elimpe</a>
+    </li>
+  </ul>
+
+  <p>for reviewing this post and providing valuable and much-appreciated feedback!</p>
+
+</section>

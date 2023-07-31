@@ -1,0 +1,33 @@
+{
+  "name": "ngx-seo",
+  "version": "6.0.0",
+  "peerDependencies": {
+    "@angular/common": "^15.0.0",
+    "@angular/core": "^15.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "maintainers": [
+    "Sam Vloeberghs <sam.vloeberghs@gmail.com> (https://samvloeberghs.be)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samvloeberghs/kwerri-oss/tree/main/libs/ngx-seo"
+  },
+  "keywords": [
+    "angular",
+    "universal",
+    "socialmedia",
+    "ssr",
+    "seo",
+    "json-ld"
+  ],
+  "contributors": [
+    "Sam Vloeberghs <sam.vloeberghs@gmail.com> (https://samvloeberghs.be)",
+    "Zama Khan Mohammed <mohammedzamakhan@gmail.com> (https://medium.com/@zamamohammed)"
+  ],
+  "author": "Sam Vloeberghs",
+  "license": "MIT"
+}
