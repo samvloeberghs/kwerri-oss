@@ -3,124 +3,129 @@
         prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product# article: http://ogp.me/ns/article# http://ogp.me/ns/fb# profile: http://ogp.me/ns/profile#"
         lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Sam Vloeberghs - Freelance Webdeveloper & Software Engineer</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="msapplication-TileImage" content="/assets/icons/icon-144x144.png">
-  <meta name="msapplication-TileColor" content="#ffffff">
-  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/icon-152x152.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/icon-96x96.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/icon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest?v=Asadl123sad">
-  <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5">
-  <link rel="shortcut icon" href="/assets/icons/favicon.ico">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="msapplication-TileImage" content="/assets/icons/mstile-144x144.png?v=Asadl123sad">
-  <meta name="theme-color" content="#ffffff">
+    <meta charset="utf-8">
+    <title>Sam Vloeberghs - Freelance Webdeveloper & Software Engineer</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/icon-152x152.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/icon-96x96.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/icon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest?v=Asadl123sad">
+    <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/assets/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/assets/icons/mstile-144x144.png?v=Asadl123sad">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body class="line-numbers">
 <div id="topborder"></div>
 <sv-root>Content is loading...</sv-root>
 <noscript>
-  <style>
-    @media (max-width: 920px) {
-      .app__aside {
-        height: 100%;
-        position: static !important;
-        margin-bottom: 0;
-      }
+    <style>
+        @media (max-width: 920px) {
+            .app__aside {
+                height: 100%;
+                position: static !important;
+                margin-bottom: 0;
+            }
 
-      .app__mobilenavcontainer {
-        display: block;
-      }
+            .app__mobilenavcontainer {
+                display: block;
+            }
 
-      .app__mobilemenu {
-        display: none !important;
-      }
+            .app__mobilemenu {
+                display: none !important;
+            }
 
-      .app__content {
-        padding-top: 20px !important;
-      }
+            .app__content {
+                padding-top: 20px !important;
+            }
 
-      .app__scrolltocontent {
-        display: block !important;
-      }
-    }
-  </style>
+            .app__scrolltocontent {
+                display: block !important;
+            }
+        }
+    </style>
 </noscript>
 <script>
-  function setTocObserver(doc, route) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        var id = entry.target.getAttribute('id');
-        if (entry.intersectionRatio > 0) {
-          var previousElements = document.querySelectorAll(`.post__toc li a`);
-          previousElements.forEach(function (previousElement) {
-            previousElement.parentElement.classList.remove('active');
-          });
-          var elSel = '.post__toc li a[href="' + route + '/#' + id + '"]';
-          var el = this.document.querySelector(elSel);
-          el.parentElement.classList.add('active');
-        }
-      });
-    });
-    // Track all sections that have an `id` applied
-    doc.querySelectorAll('h2[id], h3[id], h4[id], h5[id]').forEach(function (section) {
-      observer.observe(section);
-    });
-  }
-
-  (function () {
-    if (document && document.querySelector('sv-root[ng-server-context="ssg"]')) {
-      // *: newversion available
-      var updateVersion = document.querySelector('.app__new-version-available-msg');
-      updateVersion.addEventListener('click', function (event) {
-        event.preventDefault();
-      })
-
-      // *: mobilenav
-      var mobileNavHamburger = document.querySelector('.app__mobilemenu');
-      var aside = document.querySelector('.app__aside');
-      mobileNavHamburger.addEventListener('click', function (event) {
-        event.preventDefault();
-        if (aside.classList.contains('app__aside--open')) { // aside open
-          aside.classList.remove('app__aside--open');
-          mobileNavHamburger.classList.remove('app__mobilemenu--open');
-        } else { // aside closed
-          aside.classList.add('app__aside--open');
-          mobileNavHamburger.classList.add('app__mobilemenu--open');
-        }
-      });
-
-      // /posts/*: toc
-      if (document.querySelector('.post__toc')) {
-        window.setTocObserver(document, document.location.pathname);
-      }
-
-      // /kwerri: general conditions
-      var generalConditionsToggle = document.querySelector('.kwerri__algemene-voorwaarden-toggle');
-      if (generalConditionsToggle) {
-        var generalConditionsDoc = document.querySelector('.kwerri__algemene-voorwaarden-doc');
-        generalConditionsToggle.addEventListener('click', function (event) {
-          event.preventDefault();
-          generalConditionsDoc.hidden = !generalConditionsDoc.hidden
+    function setTocObserver(doc, route) {
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                var id = entry.target.getAttribute('id');
+                if (entry.intersectionRatio > 0) {
+                    var previousElements = document.querySelectorAll(`.post__toc li a`);
+                    previousElements.forEach(function (previousElement) {
+                        previousElement.parentElement.classList.remove('active');
+                    });
+                    var elSel = '.post__toc li a[href="' + route + '/#' + id + '"]';
+                    var el = this.document.querySelector(elSel);
+                    el.parentElement.classList.add('active');
+                }
+            });
         });
-      }
+        // Track all sections that have an `id` applied
+        doc.querySelectorAll('h2[id], h3[id], h4[id], h5[id]').forEach(function (section) {
+            observer.observe(section);
+        });
     }
-  })();
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for(let registration of registrations) {
-      registration.unregister();
-    }
-  });
+
+    (function () {
+        if (document && document.querySelector('sv-root[ng-server-context="ssg"]')) {
+            // *: newversion available
+            var updateVersion = document.querySelector('.app__new-version-available-msg');
+            updateVersion.addEventListener('click', function (event) {
+                event.preventDefault();
+            })
+
+            // *: mobilenav
+            var mobileNavHamburger = document.querySelector('.app__mobilemenu');
+            var aside = document.querySelector('.app__aside');
+            mobileNavHamburger.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (aside.classList.contains('app__aside--open')) { // aside open
+                    aside.classList.remove('app__aside--open');
+                    mobileNavHamburger.classList.remove('app__mobilemenu--open');
+                } else { // aside closed
+                    aside.classList.add('app__aside--open');
+                    mobileNavHamburger.classList.add('app__mobilemenu--open');
+                }
+            });
+
+            // /posts/*: toc
+            if (document.querySelector('.post__toc')) {
+                window.setTocObserver(document, document.location.pathname);
+            }
+
+            // /kwerri: general conditions
+            var generalConditionsToggle = document.querySelector('.kwerri__algemene-voorwaarden-toggle');
+            if (generalConditionsToggle) {
+                var generalConditionsDoc = document.querySelector('.kwerri__algemene-voorwaarden-doc');
+                generalConditionsToggle.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    generalConditionsDoc.hidden = !generalConditionsDoc.hidden
+                });
+            }
+        }
+
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let registration of registrations) {
+                registration.unregister();
+            }
+            if (registrations.length > 0) {
+                window.location.reload();
+            }
+        });
+
+    })();
 </script>
 </body>
 </html>
