@@ -67,3 +67,15 @@ const assetsList: string[] = getAssets();
 
 // move all to outputFolder
 cpSync(distFolder, outputFolder, { recursive: true });
+
+// remove all js files that have a hash in their name
+// TODO: re-enable this
+assetsList.forEach(asset => rmSync(`${ outputFolder }/${ asset }`, { force: true }));
+
+// remove all js file references from all the `index.html` files found
+const htmlFiles: string[] = globSync(`${ outputFolder }/**/*.html`)
+htmlFiles.forEach((file: string) => {
+    const disabledHtml = disableAngularForGivenRoute(readFileSync(file).toString(), assetsList);
+    writeFileSync(file, disabledHtml);
+});
+
