@@ -79,7 +79,7 @@
   }
 
   (function () {
-    if (window.ScullyIO === "generated") {
+    if (document && document.querySelector('sv-root[ng-server-context="ssg"]')) {
       // *: newversion available
       var updateVersion = document.querySelector('.app__new-version-available-msg');
       updateVersion.addEventListener('click', function (event) {
