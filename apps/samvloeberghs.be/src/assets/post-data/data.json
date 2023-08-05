@@ -1,5 +1,15 @@
 [
   {
+    "title": "Nx Workspaces - Target Defaults",
+    "slug": "nx-workspaces-target-defaults",
+    "publishDatetime": "2023-08-05T15:00:00+02:00",
+    "updateDatetime": "2023-08-05T15:00:00+02:00",
+    "author": "Sam Vloeberghs",
+    "img": "/assets/share/posts/nx.png",
+    "imgShare": "/assets/share/posts/nx_share.png",
+    "short": "In this article we will learn how to configure target defaults for your Nx workspace. This will allow you to configure default values for your targets once a global level, such as the default port for your serve target."
+  },
+  {
     "title": "Scully and Angular Universal, comparing benchmarks",
     "slug": "scully-and-angular-universal-comparing-benchmarks",
     "publishDatetime": "2020-05-31T12:00:00+01:00",

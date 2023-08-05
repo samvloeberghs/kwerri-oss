@@ -716,6 +716,12 @@ sv-app {
           margin: 25px auto;
         }
 
+        &.float-right {
+          margin-left: 25px;
+          float: right;
+          max-width: 50%;
+        }
+
       }
 
       .copy {

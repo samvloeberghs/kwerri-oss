@@ -1,0 +1,26 @@
+{
+  // ..
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build-storybook": {
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/.storybook/**/*",
+        "{projectRoot}/.storybook/**/*",
+        "{projectRoot}/tsconfig.storybook.json"
+      ],
+      "options": {
+        "styles": [
+          "libs/frontend/ui-design-system/src/lib/styles/kor/_storybook.scss",
+          "libs/frontend/ui-design-system/src/lib/styles/kor/_main.scss"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/frontend/ui-design-system/src/lib/styles"]
+        }
+      }
+    },
+    // ...
+  },
+  // ...
+}
