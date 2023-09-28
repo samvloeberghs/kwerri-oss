@@ -1,13 +1,13 @@
 [
   {
-    "title": "Changing / mocking your time zone in the browser",
-    "slug": "changing-mocking-your-time-zone-in-the-browser",
+    "title": "Changing or mocking your time zone in the browser",
+    "slug": "changing-or-mocking-your-time-zone-in-the-browser",
     "publishDatetime": "2023-09-29T09:00:00+02:00",
     "updateDatetime": "2023-09-29T09:00:00+02:00",
     "author": "Sam Vloeberghs",
     "img": "/assets/share/posts/chrome.png",
     "imgShare": "/assets/share/posts/chrome_share.jpg",
-    "short": "TODO"
+    "short": "This article is intended to help anybody that is struggling with time zones in the browser. It lists some tools and options you could use to change and play with the time zone of your browsers."
   },
   {
     "title": "Nx Workspaces - Target Defaults",

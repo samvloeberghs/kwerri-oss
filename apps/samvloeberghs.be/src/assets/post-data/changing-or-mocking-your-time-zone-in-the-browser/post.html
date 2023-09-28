@@ -3,10 +3,10 @@
   <h2 id="target-audience">Target audience</h2>
 
   <p>
-    This article is intented to help anybody that is struggling with time zones in the browser.
+    This article is intended to help anybody that is struggling with time zones in the browser.
     <strong>These instructions are shown using the Chrome browser</strong>, as it seems that Chromium based
     browsers are the only ones that allow for changing the time zone through developer tools.
-    Check the <a href="/posts/changing-mocking-your-time-zone-in-the-browser/#other-ways-of-overriding">other ways of overriding</a> section at the end of this article for some useful tips to change the time zone of browsers like Firefox and Safari.
+    Check the <a href="/posts/changing-or-mocking-your-time-zone-in-the-browser/#other-ways-of-overriding">other ways of overriding</a> section at the end of this article for some useful tips to change the time zone of browsers like Firefox and Safari.
   </p>
 
   <h2 id="step-by-step">Step by step</h2>
@@ -30,7 +30,7 @@
     </li>
   </ol>
 
-  <img src="/assets/post-data/changing-mocking-your-time-zone-in-the-browser/more-tools-sensor.jpg"
+  <img src="/assets/post-data/changing-or-mocking-your-time-zone-in-the-browser/more-tools-sensor.jpg"
        alt="Options menu > More Tools > Sensors"/>
 
   <ol start="3" style="margin-top: 24px">
@@ -40,7 +40,7 @@
     </li>
   </ol>
 
-  <img src="/assets/post-data/changing-mocking-your-time-zone-in-the-browser/greyed-out-not-in-effect.png"
+  <img src="/assets/post-data/changing-or-mocking-your-time-zone-in-the-browser/greyed-out-not-in-effect.png"
        alt="Location override: greyed out and not in effect"/>
 
   <p class="alert alert--warning">
@@ -56,7 +56,7 @@
     </li>
   </ol>
 
-  <img src="/assets/post-data/changing-mocking-your-time-zone-in-the-browser/override-in-effect.png"
+  <img src="/assets/post-data/changing-or-mocking-your-time-zone-in-the-browser/override-in-effect.png"
        alt="Location override: in effect after changes"/>
 
   <h2 id="testing-the-override">Testing the override</h2>
@@ -79,8 +79,12 @@
     There are other (more drastic) ways to change the time zone of your browser by for example updating the system time zone.
   </p>
   <p>
-    Another way is to use browser extensions that allow for changing the time zone.
-    I recommend testing them properly first to make sure they are working as expected as
+    Another way to change the time zone of Chromium based browser is to manually start the executable and pass the selected time zone as an environment variable.
+    See this Stackoverflow answer for more information: <a href="https://stackoverflow.com/a/39533934" target="_blank" rel="noopener">https://stackoverflow.com/a/39533934</a>.
+  </p>
+  <p>
+    The last option I would like to mention is to use browser extensions that allow for changing the time zone.
+    I recommend testing them properly first to make sure they are working as expected.
     I experienced first-hand that an extension in Chrome was reversing the timezone offset for a selected IANA timezone..
   </p>
 
@@ -91,16 +95,21 @@
   <h2 id="further-reading">Further reading</h2>
 
   <ol class="post__further-reading">
-      <li>
-          <a href="https://support.apple.com/guide/mac-help/change-date-time-settings-mchlp1124/mac" target="_blank" rel="noopener">
-            Change Date & Time settings on Mac
-          </a>
-      </li>
-      <li>
-          <a href="https://support.microsoft.com/en-us/windows/how-to-set-your-time-and-time-zone-dfaa7122-479f-5b98-2a7b-fa0b6e01b261" target="_blank" rel="noopener">
-            How to set your time and time zone
-          </a>
-      </li>
+    <li>
+        <a href="https://support.apple.com/guide/mac-help/change-date-time-settings-mchlp1124/mac" target="_blank" rel="noopener">
+          Change Date & Time settings on Mac
+        </a>
+    </li>
+    <li>
+        <a href="https://support.microsoft.com/en-us/windows/how-to-set-your-time-and-time-zone-dfaa7122-479f-5b98-2a7b-fa0b6e01b261" target="_blank" rel="noopener">
+          How to set your time and time zone
+        </a>
+    </li>
+    <li>
+      <a href="https://stackoverflow.com/a/39533934" target="_blank" rel="noopener">
+        Using Chrome profiles and environment variables
+      </a>
+    </li>
   </ol>
 
 </section>
