@@ -1,0 +1,106 @@
+<section class="entry-content post-body" itemprop="articleBody">
+
+  <h2 id="target-audience">Target audience</h2>
+
+  <p>
+    This article is intented to help anybody that is struggling with time zones in the browser.
+    <strong>These instructions are shown using the Chrome browser</strong>, as it seems that Chromium based
+    browsers are the only ones that allow for changing the time zone through developer tools.
+    Check the <a href="/posts/changing-mocking-your-time-zone-in-the-browser/#other-ways-of-overriding">other ways of overriding</a> section at the end of this article for some useful tips to change the time zone of browsers like Firefox and Safari.
+  </p>
+
+  <h2 id="step-by-step">Step by step</h2>
+
+  <p>
+    When working with dates and applicable time zones in the browser, it can be interesting to be able to override the time zone applied to your browser.
+    Follow the steps below to achieve it in Chrome.
+  </p>
+  <p class="alert alert--warning">
+    <strong>Important:</strong> you need to keep your DevTools open in the testing process, or the override will stay in effect!
+  </p>
+
+  <ol>
+    <li>
+      Open the DevTools of Chrome.
+      You can achieve this by using the short-cut <code>CMD + Option + I</code> for Mac or <code>CTRL + Shift + I</code> on Windows.
+      Or by right-clicking anywhere on the page and click “Inspect” in the context menu.
+    </li>
+    <li>
+      The next step is to click the 3 dots on the top right side of the DevTools pane. Go a bit deeper into the "More Tools" submenu and click "Sensors".
+    </li>
+  </ol>
+
+  <img src="/assets/post-data/changing-mocking-your-time-zone-in-the-browser/more-tools-sensor.jpg"
+       alt="Options menu > More Tools > Sensors"/>
+
+  <ol start="3" style="margin-top: 24px">
+    <li>
+      You will see a new automatically selected tab "Sensors" in the bottom part of the DevTools. The top section has details on the "Location".
+      You can now choose from any predefined location or click “Manage” and create your own.
+    </li>
+  </ol>
+
+  <img src="/assets/post-data/changing-mocking-your-time-zone-in-the-browser/greyed-out-not-in-effect.png"
+       alt="Location override: greyed out and not in effect"/>
+
+  <p class="alert alert--warning">
+    <strong>Important:</strong> At this point, there is no change into effect yet.
+    You can see this by checking the specifics like "Latitude" or "Longitude" and the "Timezone ID".
+    They are greyed out as disabled or readonly.
+  </p>
+
+  <ol start="4" style="margin-top: 16px">
+    <li>
+      To change the "Location" you need to select a new location first. This is also the case if you want to make sure the preselected version comes into effect!
+      You can be sure the changed location is in effect if the input fields of the specific values are now enabled.
+    </li>
+  </ol>
+
+  <img src="/assets/post-data/changing-mocking-your-time-zone-in-the-browser/override-in-effect.png"
+       alt="Location override: in effect after changes"/>
+
+  <h2 id="testing-the-override">Testing the override</h2>
+
+  <p>
+  An easy way to check if the location was changed is to call a short JavaScript function in the console of the DevTools.
+    To be sure about the change, <strong>call this same function with and without the override</strong>.
+  </p>
+
+  <h4 class="codetitle">DevTools console:</h4>
+  <pre><code class="language-js line-numbers">(new Date()).getTimezoneOffset();
+// should yield the offset in minutes for your location:
+// Europe/Belgium would be -120 or -60, depending on DST
+// America/New_York would be +240 or +300, depending on DST</code></pre>
+
+  <h2 id="other-ways-of-overriding">Other ways of overriding</h2>
+
+  <p>
+    As mentioned in the introduction, it seems that Chromium based browsers are the only ones that allow for changing the time zone through developer tools.
+    There are other (more drastic) ways to change the time zone of your browser by for example updating the system time zone.
+  </p>
+  <p>
+    Another way is to use browser extensions that allow for changing the time zone.
+    I recommend testing them properly first to make sure they are working as expected as
+    I experienced first-hand that an extension in Chrome was reversing the timezone offset for a selected IANA timezone..
+  </p>
+
+  <p>
+    <strong>Happy time zone testing! 🕟⏰</strong>
+  </p>
+
+  <h2 id="further-reading">Further reading</h2>
+
+  <ol class="post__further-reading">
+      <li>
+          <a href="https://support.apple.com/guide/mac-help/change-date-time-settings-mchlp1124/mac" target="_blank" rel="noopener">
+            Change Date & Time settings on Mac
+          </a>
+      </li>
+      <li>
+          <a href="https://support.microsoft.com/en-us/windows/how-to-set-your-time-and-time-zone-dfaa7122-479f-5b98-2a7b-fa0b6e01b261" target="_blank" rel="noopener">
+            How to set your time and time zone
+          </a>
+      </li>
+  </ol>
+
+</section>

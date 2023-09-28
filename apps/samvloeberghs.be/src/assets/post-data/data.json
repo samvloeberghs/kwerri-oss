@@ -1,13 +1,23 @@
 [
   {
+    "title": "Changing / mocking your time zone in the browser",
+    "slug": "changing-mocking-your-time-zone-in-the-browser",
+    "publishDatetime": "2023-09-29T09:00:00+02:00",
+    "updateDatetime": "2023-09-29T09:00:00+02:00",
+    "author": "Sam Vloeberghs",
+    "img": "/assets/share/posts/chrome.png",
+    "imgShare": "/assets/share/posts/chrome_share.jpg",
+    "short": "TODO"
+  },
+  {
     "title": "Nx Workspaces - Target Defaults",
     "slug": "nx-workspaces-target-defaults",
     "publishDatetime": "2023-08-05T15:00:00+02:00",
-    "updateDatetime": "2023-08-05T15:00:00+02:00",
+    "updateDatetime": "2023-08-06T15:30:00+02:00",
     "author": "Sam Vloeberghs",
     "img": "/assets/share/posts/nx.png",
     "imgShare": "/assets/share/posts/nx_share.png",
-    "short": "In this article we will learn how to configure target defaults for your Nx workspace. This will allow you to configure default values for your targets once a global level, such as the default port for your serve target."
+    "short": "In this article we will learn how to configure target defaults for your Nx workspace. This will allow you to configure default values for your targets once on a global level, compared to on a project level, such as the default port for your serve target."
   },
   {
     "title": "Scully and Angular Universal, comparing benchmarks",

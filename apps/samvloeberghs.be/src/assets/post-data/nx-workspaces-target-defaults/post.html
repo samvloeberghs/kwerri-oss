@@ -43,11 +43,12 @@
 
   <p>
     So we have 3 feature libraries; <code>feature-products</code>, <code>feature-sales</code> and <code>feature-clients</code>.
-    For each of these libraries we generated a storybook setup. So all of them have the same
+    For each of these libraries we generated a Storybook setup. So all of them have the same
     <code>project.json</code> that looks something like this:
   </p>
 
-  <pre><code class="language-json line-numbers">{
+  <h4 class="codetitle">./libs/feature-products/project.json</h4>
+<pre><code class="language-json line-numbers">{
     "name": "feature-products",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "projectType": "library",
@@ -114,13 +115,14 @@
   </p>
   <p>
     Imagine those styles are defined within the "Design System" UI library, <code>ui-design-system</code>, located on the same level as the feature libraries.
-    The ui library setup looks like the screenshot shown.
+    The UI library setup looks like the screenshot shown.
   </p>
   <p>
-    When running the storybook setup we want to be able to load these styles the same way as we would be running
-    the application integrating all of the feature and ui libraries. So we extend the storybook configuration a bit more, by adding the <code>styles</code> and <code>stylePreprocessorOptions</code> options to the <code>build-storybook</code> target in the <code>project.json</code> of all our feature libraries:
+    When running the Storybook setup we want to be able to load these styles the same way as we would be running
+    the application integrating all of the feature and UI libraries. So we extend the Storybook configuration a bit more, by adding the <code>styles</code> and <code>stylePreprocessorOptions</code> options to the <code>build-storybook</code> target in the <code>project.json</code> of all our feature libraries:
   </p>
 
+<h4 class="codetitle">./libs/feature-products/project.json</h4>
 <pre data-line="7-10,11-13"><code class="language-json line-numbers">{
     // ...
     "build-storybook": {
@@ -161,9 +163,10 @@
 </p>
 
 <p>
-  <strong>Target defaults to the rescue!</strong> Instead of defining this same configuration to each <code>project.json</code> we can define it once in the <code>nx.json</code> configuration file (line 13-21):
+  <strong>Target defaults to the rescue!</strong> Instead of defining this same configuration in each <code>project.json</code> we can define it once in the <code>nx.json</code> configuration file (line 13-21):
 </p>
 
+<h4 class="codetitle">./nx.json</h4>
 <pre data-line="13-21"><code class="language-json line-numbers">{
     // ..
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
@@ -204,6 +207,7 @@
       To achieve this, the only changes needed to your <code>nx.json</code> file are the following:
     </p>
 
+<h4 class="codetitle">./nx.json</h4>
 <pre data-line="5-9"><code class="language-json line-numbers">{
     // ..
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
@@ -230,7 +234,7 @@
       to define what you had to repeat for each project on a more global / default level. Just always remember to keep it as simple as you can!
      </p>
      <p>
-      In this specific case, we pulled default configuration of storybook up into the global <code>nx.json</code>, which we beforehand added to the <code>project.json</code> for each library separately.
+      In this specific case, we pulled default configuration of Storybook up into the global <code>nx.json</code>, which we beforehand added to the <code>project.json</code> for each library separately.
       This makes it easier to maintain for all existing projects (apps and libraries) and will be automatically applied
       to new projects as well.
     </p>

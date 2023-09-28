@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, rmSync, cpSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { minifyHtml } from './minify-html';
 
 const JSON5 = require('json5');
 const {
@@ -69,13 +70,19 @@ const assetsList: string[] = getAssets();
 cpSync(distFolder, outputFolder, { recursive: true });
 
 // remove all js files that have a hash in their name
-// TODO: re-enable this
 assetsList.forEach(asset => rmSync(`${ outputFolder }/${ asset }`, { force: true }));
+assetsList.forEach(asset => rmSync(`${ outputFolder }/${ asset }.map`, { force: true }));
 
 // remove all js file references from all the `index.html` files found
 const htmlFiles: string[] = globSync(`${ outputFolder }/**/*.html`)
-htmlFiles.forEach((file: string) => {
+htmlFiles.forEach(async (file: string) => {
     const disabledHtml = disableAngularForGivenRoute(readFileSync(file).toString(), assetsList);
-    writeFileSync(file, disabledHtml);
+    const minifiedHtml = await minifyHtml(disabledHtml);
+    writeFileSync(file, minifiedHtml);
 });
+
+// remove all unneeded files before deployment
+rmSync(`${ outputFolder }/stats.json`, { force: true });
+rmSync(`${ outputFolder }/3rdpartylicenses.txt`, { force: true });
+rmSync(`${ outputFolder }/index.original.html`,{ force: true });
 

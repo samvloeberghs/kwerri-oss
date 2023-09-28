@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import 'prismjs';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
@@ -12,12 +12,22 @@ import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-sass';
 import 'prismjs/components/prism-scss';
 
+import { DOCUMENT } from '@angular/common';
+import { Observable } from 'rxjs';
+
 declare var Prism: any;
 
 @Injectable()
 export class HighlightService {
 
-  highlightAll(container: ParentNode) {
-    Prism.highlightAllUnder(container);
-  }
+    private readonly document = inject(DOCUMENT);
+
+    highlightAll(): Observable<void> {
+        return new Observable(observer => {
+            Prism.highlightAllUnder(this.document, false, () => {
+                observer.next();
+                observer.complete();
+            });
+        })
+    }
 }

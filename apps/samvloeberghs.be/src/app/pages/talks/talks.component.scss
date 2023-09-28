@@ -2,48 +2,49 @@
 
 sv-talks {
   display: block;
-}
 
-.talks {
-  &__list {
-    font-size: 1.5em;
-    padding: 0;
-    margin: {
-      bottom: 20px;
-    }
+  .talks {
+    &__list {
+      font-size: 1.5em;
+      padding: 0;
+      margin: {
+        bottom: 20px;
+      }
 
-    li {
-      line-height: 2em;
-    }
-  }
-
-  &__speaker-info {
-    @media (max-width: $mobile-max-bp) {
-      width: 100%;
-    }
-
-    th {
-      @media (min-width: $mobile-max-bp) {
-        min-width: 225px;
+      li {
+        line-height: 2em;
       }
     }
 
-    th, td {
-      display: block;
-      word-break: break-word;
-      padding: {
-        left: 0;
+    &__speaker-info {
+      @media (max-width: $mobile-max-bp) {
+        width: 100%;
+      }
+
+      th {
+        @media (min-width: $mobile-max-bp) {
+          min-width: 225px;
+        }
+      }
+
+      th, td {
+        display: block;
+        word-break: break-word;
+        padding: {
+          left: 0;
+        }
+      }
+
+      td {
+        font-style: italic;
       }
     }
+  }
 
-    td {
-      font-style: italic;
+  .talk {
+    &__title {
+      margin-right: 8px;
     }
   }
-}
 
-.talk {
-  &__title {
-    margin-right: 8px;
-  }
 }

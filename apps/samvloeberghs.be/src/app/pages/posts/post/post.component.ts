@@ -1,16 +1,14 @@
 import {
     AfterViewChecked,
     Component,
-    ElementRef,
     inject,
     OnInit,
     PLATFORM_ID,
-    ViewChild,
     ViewEncapsulation
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { map, switchMap } from 'rxjs/operators';
+import { map, skip, switchMap, take } from 'rxjs/operators';
 import { JsonLdService, SeoSocialShareData, SeoSocialShareService } from 'ngx-seo';
 import { DatePipe, DOCUMENT, isPlatformBrowser, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 
@@ -20,6 +18,7 @@ import { fixExternalUrl } from '../../../fix-external-url';
 import { environment } from '../../../environment';
 import { HireMeComponent } from '../hire-me/hire-me.component';
 import { HighlightService } from '../highlight.service';
+import { BehaviorSubject } from 'rxjs';
 
 // TODO(sv): fix this type
 declare const window: any;
@@ -43,8 +42,6 @@ declare const window: any;
 })
 export class PostComponent implements OnInit, AfterViewChecked {
 
-    @ViewChild('postContainer') private readonly postContainer!: ElementRef;
-
     private readonly router = inject(Router);
     private readonly route = inject(ActivatedRoute);
     private readonly dataService = inject(DataService);
@@ -57,7 +54,7 @@ export class PostComponent implements OnInit, AfterViewChecked {
 
     public post!: Post;
     public error: any;
-    public highlighted = false;
+    private highlighted$$ = new BehaviorSubject(false);
 
     ngOnInit() {
         const slug = this.route.snapshot.params['slug'];
@@ -122,9 +119,10 @@ export class PostComponent implements OnInit, AfterViewChecked {
     }
 
     ngAfterViewChecked() {
-        if (this.post && this.post.content && !this.highlighted) {
-            this.highlightService.highlightAll(this.postContainer.nativeElement);
-            this.highlighted = true;
+        if (this.post && this.post.content && !this.highlighted$$.value) {
+            this.highlightService.highlightAll().subscribe(() => {
+                this.highlighted$$.next(true);
+            });
         }
     }
 
