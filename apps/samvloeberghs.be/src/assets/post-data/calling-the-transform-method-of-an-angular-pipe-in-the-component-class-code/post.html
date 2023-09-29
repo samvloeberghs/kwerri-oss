@@ -3,7 +3,7 @@
   <h2 id="target-audience">Target audience</h2>
 
   <p>
-    This article is intended to help anybody that is looking for ways to call the transform method in the
+    This article is intended to help anybody that is looking for ways to call the <code>transform</code> method in the
     component class code or in any other TypeScript code that has an Injection Context.
   </p>
   <p>
@@ -15,12 +15,14 @@
 
   <p>
     There are several cases where you would want to reuse the functionality of a pipe in your component class code.
-    The most simple example is formatting dates in an Angular component's template. The DatePipe is imported in the
-    providers of the component and then used by piping the value.
+    The most simple example is formatting dates in an Angular component's template. The <code>DatePipe</code>, provided
+    by the Angular framework itself, is imported in the providers of the component and then used by piping the value in
+    the template.
   </p>
   <p>
-    For example, <code>{{currentDate | date : "fullDate"}}</code> would print out something like "Friday, September 29, 2023" in the template.
-    If you would like to use the same functionality in the component class code, you can inject the DatePipe and then call the transform method manually.
+    For example, <code>{{currentDate | date : "fullDate"}}</code> would print out something like
+    "Friday, September 29, 2023" in the template. If you would like to use the same functionality in the component
+    class code, you can inject the <code>DatePipe</code> and then call the <code>transform</code> method manually.
   </p>
 
   <h4 class="codetitle">Component example:</h4>
@@ -38,14 +40,39 @@ export class ExampleComponent {
   }
 }</code></pre>
 
-  <p class="alert alert--warning">
-    <strong>Note:</strong> This is however not the way I would personally recommend to reuse the functionality of any
+  <p class="alert alert--info">
+    <strong>Note:</strong> This is not the way I would personally recommend to reuse the functionality of any
     (Angular build-in) pipe. Continue reading to find out better ways.
   </p>
 
   <h2 id="a-better-way-to-reuse-the-functionality-of-a-pipe">A better way to reuse the functionality of a pipe</h2>
 
   <h3 id="angular-build-in-pipes">Angular build-in Pipes</h3>
+
+  <p>
+    Next to providing common functionality like formatting dates, percentages, currencies or numbers through pipes,
+    Angular also exposes the inner working of those pipes directly as export functions. For example, the usecase from
+    above, where we injected the <code>DatePipe</code> to be able to use the <code>transform</code> method, can be
+    rewritten as follows:
+  </p>
+
+  <h4 class="codetitle">Component example, with formatDate:</h4>
+  <pre><code class="language-ts line-numbers">import { formatDate } from '@angular/common';
+
+@Component({
+    ...
+})
+export class ExampleComponent {
+  constructor(){
+    const formattedDate = formatDate(currentDate, 'fullDate');
+    console.log(formattedDate);
+  }
+}</code></pre>
+
+  <p>
+    In this case we don't even need to inject the <code>DatePipe</code> anymore, because the <code>formatDate</code> is
+    exposed as a pure function directly.
+  </p>
 
   <h3 id="custom-pipes">Custom Pipes</h3>
 
