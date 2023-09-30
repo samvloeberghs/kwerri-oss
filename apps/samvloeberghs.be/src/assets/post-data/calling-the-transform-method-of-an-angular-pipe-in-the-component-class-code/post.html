@@ -1,0 +1,188 @@
+<section class="entry-content post-body" itemprop="articleBody">
+
+  <h2 id="target-audience">Target audience</h2>
+
+  <p>
+    This article is intended to help anybody that is looking for ways to call the <code>transform</code> method of
+    any Angular Pipe in a component class code or in other TypeScript code.
+  </p>
+  <p>
+    We will also learn about some other simple trick on how to design Angular pipes and how to test them in
+    those particular cases.
+  </p>
+
+  <h2 id="step-by-step">Introduction</h2>
+
+  <p>
+    There are several cases where you would want to reuse the <code>transform</code> functionality of a pipe in your
+    component class code. The most simple example is formatting dates in an Angular component's template. The
+    <code>DatePipe</code>, provided by the Angular framework itself, is imported in the providers of the component and
+    then used by piping the value in the template.
+  </p>
+  <p>
+    For example, <code>{{currentDate | date : "fullDate"}}</code> would print out something like
+    "Friday, September 29, 2023" in the template. If you would like to use the same functionality in the component
+    class code, you can inject the <code>DatePipe</code> and then call the <code>transform</code> method manually.
+  </p>
+
+  <h4 class="codetitle">Component example:</h4>
+  <pre><code class="language-ts line-numbers">import { DatePipe } from '@angular/common';
+
+@Component({
+  ...
+  template: `{{currentDate | date : "fullDate"}}`
+  imports: [DatePipe],
+  standalone: true,
+})
+export class ExampleComponent {
+  constructor(public currentDate = new Date()) {
+    const formattedDate = inject(DatePipe).transform(this.currentDate, 'fullDate');
+    console.log(formattedDate);
+  }
+}</code></pre>
+
+  <p class="alert alert--info">
+    <strong>Note:</strong> This is not the way I would personally recommend to reuse the functionality of any
+    (Angular build-in) pipe. Continue reading to find out why there are better ways.
+  </p>
+
+  <h3 id="injection-context">Injection Context</h3>
+
+  <p>
+    This method can only be used wherever you are in your code that has an
+    <a href="https://angular.io/guide/dependency-injection-context" target="_blank" rel="noopener">Injection Context</a>.
+    You could use the <code>runInInjectionContext</code> function to make sure you have access to the right providers,
+    but still you would need access to the right injector.
+  </p>
+
+  <p>
+    Another way would be to manually instantiate the <code>DatePipe</code> class. In that case you probably
+    need the applicable <code>LOCALE_ID</code> of your application, leading to again, needing the right
+    injection context. 🤷🏼
+  </p>
+
+  <h2 id="a-better-way-to-reuse-the-functionality-of-a-pipe">A better way to reuse the functionality of a pipe</h2>
+
+  <h3 id="angular-build-in-pipes">Angular build-in Pipes</h3>
+
+  <p>
+    Next to providing common functionality
+    like <a href="https://angular.io/guide/pipes-overview#built-in-pipes" target="_blank">formatting dates, percentages,
+    currencies or numbers</a> through pipes, Angular also exposes the inner working of those pipes directly as pure
+    functions. For example, considering the use case from above, where we injected the <code>DatePipe</code> to be
+    able to use the <code>transform</code> method, can be rewritten as follows:
+  </p>
+
+  <h4 class="codetitle">Component example, with formatDate:</h4>
+  <pre><code class="language-ts line-numbers">import { formatDate } from '@angular/common';
+
+@Component({
+    ...
+})
+export class ExampleComponent {
+  constructor(){
+    const formattedDate = formatDate(currentDate, 'fullDate');
+    console.log(formattedDate);
+  }
+}</code></pre>
+
+  <p>
+    We don't even need to inject the <code>DatePipe</code> anymore, because the <code>formatDate</code> is
+    exposed as a pure function directly. But we still need to get the applicable <code>LOCALE_ID</code> somehow. So in
+    this particular case, we can't get around needing the injection context.
+  </p>
+
+  <h3 id="custom-pipes">Custom Pipes</h3>
+
+  <p>
+    When creating your own custom pipes for your applications and having the same need to reuse the functionality of
+    the <code>transform</code> method, it's better to start with an external function first. This way you can easily
+    use and test this function on its own:
+  </p>
+
+  <h4 class="codetitle">sum-of-numbers.ts</h4>
+  <pre><code class="language-ts line-numbers">export function sumOfNumbers(listOfNumbers: number[]): number {
+  return listOfNumbers.reduce((a, b) => a + b, 0);
+}</code></pre>
+
+  <h4 class="codetitle">sum-of-numbers.spec.ts</h4>
+  <pre><code class="language-ts line-numbers">describe('sumOfNumbers', () => {
+  it('should return the sum of all numbers in the list', () => {
+    const listOfNumbers = [1, 2, 3, 4, 5];
+    const result = sumOfNumbers(listOfNumbers);
+    expect(result).toBe(15);
+  });
+});
+</code></pre>
+
+  <h4 class="codetitle">sum-of-numbers.pipe.ts</h4>
+  <pre><code class="language-ts line-numbers">import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'sumOfNumbers',
+  standalone: true,
+})
+export class SumOfNumbersPipe implements PipeTransform {
+    transform(listOfNumbers: number[]): number {
+    return sumOfNumbers(listOfNumbers);
+  }
+}
+// no need to test this pipe, as it's just a wrapper around the function
+// and you would be testing instantiating a class, which is not necessary
+</code></pre>
+
+  <p>
+    Now that we have the function and its test covered, we can wrap it in a pipe. This way we can still use the function
+    in our component class code, but also in our templates.
+  </p>
+
+  <h4 class="codetitle">Example component:</h4>
+  <pre><code class="language-ts line-numbers">import { SumOfNumbersPipe } from './sum-of-numbers.pipe';
+import { sumOfNumbers } from './sum-of-numbers';
+
+@Component({
+  ...
+  template: `{{listOfNumbers | sumOfNumbers}}`
+  imports: [SumOfNumbersPipe],
+  standalone: true,
+})
+export class ExampleComponent {
+    constructor(public listOfNumbers = [1, 2, 3]) {
+    console.log(sumOfNumbers(this.listOfNumbers));
+  }
+}</code></pre>
+  <h2 id="conclusion">Conclusion</h2>
+
+  <p>
+    There is no wrong or right way of reusing the functionality of any (Angular build-in) pipe.
+    It all depends on personal or project-specific preference and how your applications are structured.
+    But at least now you know how I would do it, and I honestly believe it's a better way :).
+    <strong>Thanks for reading!</strong>
+  </p>
+
+  <h2 id="further-reading">Further reading</h2>
+
+  <ol class="post__further-reading">
+    <li>
+      <a href="https://angular.io/guide/pipes-overview" target="_blank" rel="noopener">
+        Angular Documentation: Understanding Pipes
+      </a>
+    </li>
+    <li>
+        <a href="https://angular.io/api/core/Pipe" target="_blank" rel="noopener">
+          Angular Pipe Decorator
+        </a>
+    </li>
+    <li>
+        <a href="https://angular.io/guide/styleguide#02-09" target="_blank" rel="noopener">
+          Angular Style Guide: Pipe names
+        </a>
+    </li>
+    <li>
+      <a href="https://angular.io/guide/dependency-injection-context" target="_blank" rel="noopener">
+        Angular Documentation: Injection Context
+      </a>
+    </li>
+  </ol>
+
+</section>
