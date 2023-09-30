@@ -4,10 +4,10 @@
 
   <p>
     This article is intended to help anybody that is looking for ways to call the <code>transform</code> method of
-    any Pipe in a component class code or in other TypeScript code.
+    any Angular Pipe in a component class code or in other TypeScript code.
   </p>
   <p>
-    We will also learn about some other tips & tricks on how to design pipes and how to test them in
+    We will also learn about some other simple trick on how to design Angular pipes and how to test them in
     those particular cases.
   </p>
 
@@ -51,10 +51,6 @@ export class ExampleComponent {
   <p>
     This method can only be used wherever you are in your code that has an
     <a href="https://angular.io/guide/dependency-injection-context" target="_blank" rel="noopener">Injection Context</a>.
-    The <code>DatePipe</code> has to be provided at any level that leads to the same injector context as the component.
-  </p>
-
-  <p>
     You could use the <code>runInInjectionContext</code> function to make sure you have access to the right providers,
     but still you would need access to the right injector.
   </p>
@@ -72,10 +68,9 @@ export class ExampleComponent {
   <p>
     Next to providing common functionality
     like <a href="https://angular.io/guide/pipes-overview#built-in-pipes" target="_blank">formatting dates, percentages,
-    currencies or numbers</a> through pipes, Angular also exposes the inner working of those pipes directly as export
-    functions. For example, the usecase from above, where we injected the <code>DatePipe</code> to be able to use
-    the <code>transform</code> method, can be
-    rewritten as follows:
+    currencies or numbers</a> through pipes, Angular also exposes the inner working of those pipes directly as pure
+    functions. For example, considering the use case from above, where we injected the <code>DatePipe</code> to be
+    able to use the <code>transform</code> method, can be rewritten as follows:
   </p>
 
   <h4 class="codetitle">Component example, with formatDate:</h4>
@@ -102,7 +97,7 @@ export class ExampleComponent {
   <p>
     When creating your own custom pipes for your applications and having the same need to reuse the functionality of
     the <code>transform</code> method, it's better to start with an external function first. This way you can easily
-    use and test this function on it's own:
+    use and test this function on its own:
   </p>
 
   <h4 class="codetitle">sum-of-numbers.ts</h4>
