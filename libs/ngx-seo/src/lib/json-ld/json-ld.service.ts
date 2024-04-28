@@ -11,7 +11,6 @@ export class JsonLdService {
   private readonly document = inject(DOCUMENT);
   private jsonLd?: JsonLd | JsonLd[];
 
-
   public setData(data: JsonLd | JsonLd[]): void {
     this.jsonLd = data;
     this.inject();
