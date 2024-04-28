@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map, skip, switchMap, take } from 'rxjs/operators';
 import { JsonLdService, SeoSocialShareData, SeoSocialShareService } from 'ngx-seo';
-import { DatePipe, DOCUMENT, isPlatformBrowser, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { DatePipe, DOCUMENT, isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 
 import { Post } from './post.model';
 import { DataService } from '../../../services/data.service';
@@ -33,12 +33,10 @@ declare const window: any;
         HighlightService
     ],
     imports: [
-        NgIf,
-        DatePipe,
-        NgFor,
-        HireMeComponent,
-        NgTemplateOutlet,
-    ]
+    DatePipe,
+    HireMeComponent,
+    NgTemplateOutlet
+]
 })
 export class PostComponent implements OnInit, AfterViewChecked {
 
