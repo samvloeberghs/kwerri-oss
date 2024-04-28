@@ -8,16 +8,12 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/samvloeberghs.be/browser",
         "index": "apps/samvloeberghs.be/src/index.html",
         "main": "apps/samvloeberghs.be/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/samvloeberghs.be/tsconfig.app.json",
         "assets": [
           "apps/samvloeberghs.be/src/assets",
@@ -28,14 +24,10 @@
         "statsJson": true,
         "styles": [],
         "stylePreprocessorOptions": {
-          "includePaths": [
-            "apps/samvloeberghs.be/src/scss"
-          ]
+          "includePaths": ["apps/samvloeberghs.be/src/scss"]
         },
         "scripts": [],
-        "allowedCommonJsDependencies": [
-          "prismjs"
-        ]
+        "allowedCommonJsDependencies": ["prismjs"]
       },
       "configurations": {
         "production": {
@@ -68,10 +60,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "samvloeberghs.be:build:production"
+          "buildTarget": "samvloeberghs.be:build:production"
         },
         "development": {
-          "browserTarget": "samvloeberghs.be:build:development"
+          "buildTarget": "samvloeberghs.be:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -79,35 +71,18 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "samvloeberghs.be:build"
+        "buildTarget": "samvloeberghs.be:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "apps/samvloeberghs.be/**/*.ts",
-          "apps/samvloeberghs.be/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/samvloeberghs.be/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "jestConfig": "apps/samvloeberghs.be/jest.config.ts"
       }
     },
     "serve-static": {
@@ -117,18 +92,14 @@
       }
     },
     "server": {
-      "dependsOn": [
-        "build"
-      ],
+      "dependsOn": ["build"],
       "executor": "@angular-devkit/build-angular:server",
       "options": {
         "outputPath": "dist/apps/samvloeberghs.be/server",
         "main": "apps/samvloeberghs.be/server.ts",
         "tsConfig": "apps/samvloeberghs.be/tsconfig.server.json",
         "stylePreprocessorOptions": {
-          "includePaths": [
-            "apps/samvloeberghs.be/src/scss"
-          ]
+          "includePaths": ["apps/samvloeberghs.be/src/scss"]
         }
       },
       "configurations": {
@@ -146,7 +117,7 @@
       "defaultConfiguration": "production"
     },
     "serve-ssr": {
-      "executor": "@nguniversal/builders:ssr-dev-server",
+      "executor": "@angular-devkit/build-angular:ssr-dev-server",
       "configurations": {
         "development": {
           "browserTarget": "samvloeberghs.be:build:development",
@@ -160,7 +131,7 @@
       "defaultConfiguration": "development"
     },
     "prerender": {
-      "executor": "@nguniversal/builders:prerender",
+      "executor": "@angular-devkit/build-angular:prerender",
       "options": {
         "routes": [
           "/",

@@ -4,7 +4,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { fixExternalUrl } from './fix-external-url';
 import { JsonLdService, SeoSocialShareService } from 'ngx-seo';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 @Injectable()
 export class CustomLocationStrategy extends PathLocationStrategy {
@@ -17,7 +17,9 @@ export class CustomLocationStrategy extends PathLocationStrategy {
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideHttpClient(),
+        provideHttpClient(
+          withFetch()
+        ),
         provideRouter([
             {
                 path: '',
