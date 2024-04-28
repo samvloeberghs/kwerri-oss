@@ -1,4 +1,4 @@
-import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -14,12 +14,10 @@ import { DataService } from '../../services/data.service';
     encapsulation: ViewEncapsulation.None,
     standalone: true,
     imports: [
-        DatePipe,
-        NgIf,
-        AsyncPipe,
-        NgFor,
-        RouterLink
-    ]
+    DatePipe,
+    AsyncPipe,
+    RouterLink
+]
 })
 export class PostsComponent {
 

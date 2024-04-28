@@ -1,45 +1,49 @@
-<article *ngIf="post" class="post">
-
-  <img [src]="post.img" [alt]="post.title" class="post__introimage"/>
-
-  <h1>
-    <span>
-      {{post.title}}
-    </span>
-  </h1>
-
-  <div class="post__wrapper">
-    <div class="post__content">
-      <p class="post__posted">
-        Posted on
-        <time [attr.datetime]="post.publishDatetime">{{ post.publishDatetime | date:'fullDate'}}</time>
-        <span *ngIf="!!post.updateDatetime && post.publishDatetime != post.updateDatetime">
-      <em>
-        <br/>
-        Last update on
-        <time [attr.datetime]="post.updateDatetime">{{ post.updateDatetime | date:'fullDate'}}</time>
-      </em>
-    </span>
-      </p>
-      <div [innerHtml]="post.content" highlight-js-content=".highlighted"></div>
-    </div>
-    <div class="post__toc" *ngIf="post.toc">
-      <h3>Contents</h3>
-      <ol>
-        <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ $implicit: post.toc }"></ng-container>
-      </ol>
-
-      <ng-template #recursiveListTmpl let-list>
-        <li *ngFor="let item of list" [class.active]="item.active" class="{{item.level}}">
-          <a href="/posts/{{post.slug}}/#{{item.link}}">{{ item.title }}</a>
-          <ol *ngIf="item.children && item.children.length > 0">
-            <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ $implicit: item.children }"></ng-container>
+@if (post) {
+  <article class="post">
+    <img [src]="post.img" [alt]="post.title" class="post__introimage"/>
+    <h1>
+      <span>
+        {{post.title}}
+      </span>
+    </h1>
+    <div class="post__wrapper">
+      <div class="post__content">
+        <p class="post__posted">
+          Posted on
+          <time [attr.datetime]="post.publishDatetime">{{ post.publishDatetime | date:'fullDate'}}</time>
+          @if (!!post.updateDatetime && post.publishDatetime != post.updateDatetime) {
+            <span>
+              <em>
+                <br/>
+                Last update on
+                <time [attr.datetime]="post.updateDatetime">{{ post.updateDatetime | date:'fullDate'}}</time>
+              </em>
+            </span>
+          }
+        </p>
+        <div [innerHtml]="post.content" highlight-js-content=".highlighted"></div>
+      </div>
+      @if (post.toc) {
+        <div class="post__toc">
+          <h3>Contents</h3>
+          <ol>
+            <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ $implicit: post.toc }"></ng-container>
           </ol>
-        </li>
-      </ng-template>
+          <ng-template #recursiveListTmpl let-list>
+            @for (item of list; track item) {
+              <li [class.active]="item.active" class="{{item.level}}">
+                <a href="/posts/{{post.slug}}/#{{item.link}}">{{ item.title }}</a>
+                @if (item.children && item.children.length > 0) {
+                  <ol>
+                    <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ $implicit: item.children }"></ng-container>
+                  </ol>
+                }
+              </li>
+            }
+          </ng-template>
+        </div>
+      }
     </div>
-  </div>
-
-  <sv-hire-me></sv-hire-me>
-
-</article>
+    <sv-hire-me></sv-hire-me>
+  </article>
+}

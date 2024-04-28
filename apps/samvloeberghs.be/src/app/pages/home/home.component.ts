@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { DataService } from '../../services/data.service';
 import { Post } from '../posts/post/post.model';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -14,10 +14,9 @@ import { RouterLink } from '@angular/router';
     encapsulation: ViewEncapsulation.None,
     standalone: true,
     imports: [
-        NgIf,
-        RouterLink,
-        AsyncPipe
-    ]
+    RouterLink,
+    AsyncPipe
+]
 })
 export class HomeComponent {
 
