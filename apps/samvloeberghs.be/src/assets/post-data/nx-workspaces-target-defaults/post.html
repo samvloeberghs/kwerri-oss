@@ -1,54 +1,66 @@
 <section class="entry-content post-body" itemprop="articleBody">
-
   <h2 id="target-audience">Target audience</h2>
 
   <p>
     This article is intented to help anybody using Nx workspaces.
-    <strong>These instructions are based on the latest version of Nx</strong>, at the time
-    of writing <code>16.5.5</code>.  They could work for earlier / later versions, but might need some tweaking in the configuration.
+    <strong>These instructions are based on the latest version of Nx</strong>,
+    at the time of writing <code>16.5.5</code>. They could work for earlier /
+    later versions, but might need some tweaking in the configuration.
   </p>
 
   <h2 id="introduction">Introduction</h2>
 
   <p>
-    Each project (app or library) in an Nx workspace comes with different commands, or targets, that can be executed.
-    For example to <code>build</code>, <code>test</code> or <code>lint</code> your project, just to give the 3 most common examples.
+    Each project (app or library) in an Nx workspace comes with different
+    commands, or targets, that can be executed. For example to
+    <code>build</code>, <code>test</code> or <code>lint</code> your project,
+    just to give the 3 most common examples.
   </p>
   <p>
-    If you use task executors, all apps and libraries in an Nx workspace come with a <code>project.json</code> file
-    that holds
-    configuration for these commands for each individual project. If you use npm scripts, the configuration will mostly be in the
-    <code>package.json</code> file of the projects. Anyway, Nx will always merge the two files to come to the full
-    project
-    configuration.
+    If you use task executors, all apps and libraries in an Nx workspace come
+    with a <code>project.json</code> file that holds configuration for these
+    commands for each individual project. If you use npm scripts, the
+    configuration will mostly be in the <code>package.json</code> file of the
+    projects. Anyway, Nx will always merge the two files to come to the full
+    project configuration.
   </p>
 
   <p>
-    Because every project, app or library, has similar configuration for its targets, <strong>it can sometimes become
-    cumbersome to keep the configuration up-to-date across all of them</strong>. Especially if you have a lot of libraries, which is very common.
-    Instead of defining the same configuration acros all of our projects, we can <strong>leverage target defaults so that we don't need to maintain the same configuration everywhere</strong>.
+    Because every project, app or library, has similar configuration for its
+    targets,
+    <strong
+      >it can sometimes become cumbersome to keep the configuration up-to-date
+      across all of them</strong
+    >. Especially if you have a lot of libraries, which is very common. Instead
+    of defining the same configuration acros all of our projects, we can
+    <strong
+      >leverage target defaults so that we don't need to maintain the same
+      configuration everywhere</strong
+    >.
   </p>
 
   <h2 id="example-setup">Example Setup</h2>
 
   <p>
-    Let's start with an example setup where we have different feature libraries. Each feature library holds the
-    source code
-    for a specific section of our application. Let's keep it simple and use a CMS as an example. In this CMS we will
-    be managing
-    <strong>products</strong>, <strong>sales</strong> and <strong>clients</strong>.
+    Let's start with an example setup where we have different feature libraries.
+    Each feature library holds the source code for a specific section of our
+    application. Let's keep it simple and use a CMS as an example. In this CMS
+    we will be managing
+    <strong>products</strong>, <strong>sales</strong> and
+    <strong>clients</strong>.
   </p>
 
   <h3 id="library-setup">Library setup</h3>
 
   <p>
-    So we have 3 feature libraries; <code>feature-products</code>, <code>feature-sales</code> and <code>feature-clients</code>.
-    For each of these libraries we generated a Storybook setup. So all of them have the same
+    So we have 3 feature libraries; <code>feature-products</code>,
+    <code>feature-sales</code> and <code>feature-clients</code>. For each of
+    these libraries we generated a Storybook setup. So all of them have the same
     <code>project.json</code> that looks something like this:
   </p>
 
   <h4 class="codetitle">./libs/feature-products/project.json</h4>
-<pre><code class="language-json line-numbers">{
+  <pre><code class="language-json line-numbers">{
     "name": "feature-products",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
     "projectType": "library",
@@ -64,7 +76,7 @@
         }
     },
     "lint": {
-        "executor": "@nx/linter:eslint",
+        "executor": "@nx/eslint:eslint",
         "options": {
             "lintFilePatterns": [
                 "libs/feature-products/**/*.ts",
@@ -106,24 +118,34 @@
 
   <h3 id="adding-shared-styles">Adding shared styles</h3>
 
-  <img class="float-right"
-  style="width: 40%"
-         src="/assets/post-data/nx-workspaces-target-defaults/ui-design-system-lib.png"
-         alt="UI Design system project library" />
+  <img
+    class="float-right"
+    style="width: 40%"
+    src="/assets/post-data/nx-workspaces-target-defaults/ui-design-system-lib.png"
+    alt="UI Design system project library"
+  />
   <p>
-    Each of these libraries obviously have their own set of css styling, but like with any other project there are some shared styles, for example typography or color-schemes.
+    Each of these libraries obviously have their own set of css styling, but
+    like with any other project there are some shared styles, for example
+    typography or color-schemes.
   </p>
   <p>
-    Imagine those styles are defined within the "Design System" UI library, <code>ui-design-system</code>, located on the same level as the feature libraries.
-    The UI library setup looks like the screenshot shown.
+    Imagine those styles are defined within the "Design System" UI library,
+    <code>ui-design-system</code>, located on the same level as the feature
+    libraries. The UI library setup looks like the screenshot shown.
   </p>
   <p>
-    When running the Storybook setup we want to be able to load these styles the same way as we would be running
-    the application integrating all of the feature and UI libraries. So we extend the Storybook configuration a bit more, by adding the <code>styles</code> and <code>stylePreprocessorOptions</code> options to the <code>build-storybook</code> target in the <code>project.json</code> of all our feature libraries:
+    When running the Storybook setup we want to be able to load these styles the
+    same way as we would be running the application integrating all of the
+    feature and UI libraries. So we extend the Storybook configuration a bit
+    more, by adding the <code>styles</code> and
+    <code>stylePreprocessorOptions</code> options to the
+    <code>build-storybook</code> target in the <code>project.json</code> of all
+    our feature libraries:
   </p>
 
-<h4 class="codetitle">./libs/feature-products/project.json</h4>
-<pre data-line="7-10,11-13"><code class="language-json line-numbers">{
+  <h4 class="codetitle">./libs/feature-products/project.json</h4>
+  <pre data-line="7-10,11-13"><code class="language-json line-numbers">{
     // ...
     "build-storybook": {
         "executor": "@storybook/angular:build-storybook",
@@ -150,24 +172,30 @@
     "tags": ["type:feature"]
 }</code></pre>
 
-<p>
-  On line 7-10 we import some scss files with styles that should be loaded globally. It contains for example the typography and basic styles.
-  On line 11-13 we define the import / include paths for the <code>@import</code> statements to use as a base for resolving files.
-</p>
+  <p>
+    On line 7-10 we import some scss files with styles that should be loaded
+    globally. It contains for example the typography and basic styles. On line
+    11-13 we define the import / include paths for the
+    <code>@import</code> statements to use as a base for resolving files.
+  </p>
 
-<h2 id="using-target-defaults">Using Target Defaults</h2>
+  <h2 id="using-target-defaults">Using Target Defaults</h2>
 
-<p>
-  Imagine having several, 10 or more, applications and hundreds, if not thousands, of feature libraries in your monorepository where we constantly need to add and keep this configuration up-to-date.
-  Nearly impossible to not forget it at some places at a first try!
-</p>
+  <p>
+    Imagine having several, 10 or more, applications and hundreds, if not
+    thousands, of feature libraries in your monorepository where we constantly
+    need to add and keep this configuration up-to-date. Nearly impossible to not
+    forget it at some places at a first try!
+  </p>
 
-<p>
-  <strong>Target defaults to the rescue!</strong> Instead of defining this same configuration in each <code>project.json</code> we can define it once in the <code>nx.json</code> configuration file (line 13-21):
-</p>
+  <p>
+    <strong>Target defaults to the rescue!</strong> Instead of defining this
+    same configuration in each <code>project.json</code> we can define it once
+    in the <code>nx.json</code> configuration file (line 13-21):
+  </p>
 
-<h4 class="codetitle">./nx.json</h4>
-<pre data-line="13-21"><code class="language-json line-numbers">{
+  <h4 class="codetitle">./nx.json</h4>
+  <pre data-line="13-21"><code class="language-json line-numbers">{
     // ..
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
     "targetDefaults": {
@@ -195,20 +223,21 @@
 }
 </code></pre>
 
+  <p>
+    Nx will now use the default configuration provided if not overwritten at the
+    library / application level.
+  </p>
 
-<p>
-  Nx will now use the default configuration provided if not overwritten at the library / application level.
-</p>
+  <h2 id="another-example">Another example</h2>
 
-    <h2 id="another-example">Another example</h2>
+  <p>
+    Another, and even more simple example, would be to override the default port
+    to serve your applications to <code>5000</code>. To achieve this, the only
+    changes needed to your <code>nx.json</code> file are the following:
+  </p>
 
-    <p>
-      Another, and even more simple example, would be to override the default port to serve your applications to <code>5000</code>.
-      To achieve this, the only changes needed to your <code>nx.json</code> file are the following:
-    </p>
-
-<h4 class="codetitle">./nx.json</h4>
-<pre data-line="5-9"><code class="language-json line-numbers">{
+  <h4 class="codetitle">./nx.json</h4>
+  <pre data-line="5-9"><code class="language-json line-numbers">{
     // ..
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
     "targetDefaults": {
@@ -223,35 +252,48 @@
 }
 </code></pre>
 
-    <p>
-        Every application will now be served on port <code>5000</code> by default, unless you overwrite it in the <code>project.json</code> of the specific application.
-    </p>
+  <p>
+    Every application will now be served on port <code>5000</code> by default,
+    unless you overwrite it in the <code>project.json</code> of the specific
+    application.
+  </p>
 
-    <h2 id="conclusion">Conclusion</h2>
+  <h2 id="conclusion">Conclusion</h2>
 
-    <p>
-      Repeating yourself is generally considered a bad practice in clean code principles. Especially when the tools give you the power
-      to define what you had to repeat for each project on a more global / default level. Just always remember to keep it as simple as you can!
-     </p>
-     <p>
-      In this specific case, we pulled default configuration of Storybook up into the global <code>nx.json</code>, which we beforehand added to the <code>project.json</code> for each library separately.
-      This makes it easier to maintain for all existing projects (apps and libraries) and will be automatically applied
-      to new projects as well.
-    </p>
+  <p>
+    Repeating yourself is generally considered a bad practice in clean code
+    principles. Especially when the tools give you the power to define what you
+    had to repeat for each project on a more global / default level. Just always
+    remember to keep it as simple as you can!
+  </p>
+  <p>
+    In this specific case, we pulled default configuration of Storybook up into
+    the global <code>nx.json</code>, which we beforehand added to the
+    <code>project.json</code> for each library separately. This makes it easier
+    to maintain for all existing projects (apps and libraries) and will be
+    automatically applied to new projects as well.
+  </p>
 
-    <h2 id="further-reading">Further reading</h2>
+  <h2 id="further-reading">Further reading</h2>
 
-    <ol class="post__further-reading">
-        <li>
-            <a href="https://nx.dev/reference/project-configuration" target="_blank" rel="noopener">
-                Nx Docs: Project Configuration
-            </a>
-        </li>
-        <li>
-            <a href="https://nx.dev/reference/nx-json#target-defaults" target="_blank" rel="noopener">
-                Nx Docs: nx.json > Target Defaults
-            </a>
-        </li>
-    </ol>
-
+  <ol class="post__further-reading">
+    <li>
+      <a
+        href="https://nx.dev/reference/project-configuration"
+        target="_blank"
+        rel="noopener"
+      >
+        Nx Docs: Project Configuration
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://nx.dev/reference/nx-json#target-defaults"
+        target="_blank"
+        rel="noopener"
+      >
+        Nx Docs: nx.json > Target Defaults
+      </a>
+    </li>
+  </ol>
 </section>
