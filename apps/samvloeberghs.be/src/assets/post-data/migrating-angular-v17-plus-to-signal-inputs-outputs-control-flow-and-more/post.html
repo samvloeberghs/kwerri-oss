@@ -1,0 +1,82 @@
+<section class="entry-content post-body" itemprop="articleBody">
+  <h2 id="target-audience">Target audience</h2>
+
+  <p>
+    This article is intended to help anybody willing to migrate their Angular
+    v17+ project to use signal inputs, signal outputs, the new control
+    flow and inject function.
+  </p>
+
+  <h2 id="introduction">Introduction</h2>
+
+  <p>
+    We start with a very simple example of a project that uses the well known
+    <code>&#64;Input()</code> annotaton for component inputs and
+    <code>&#64;Output()</code> for component outputs. Besides that we have a
+    service that is injected using constructor arguments and we are using the
+    typical <code>*ngIf</code>, <code>*ngFor</code> and <code>*ngSwitch</code>
+    structural directives to control the data rendering in our components.
+  </p>
+
+  <hr />
+
+  <img src="/assets/post-data/migrating-angular-v17-plus-to-signal-inputs-outputs-control-flow-and-more/example-project.png"
+       alt="Example Project"/>
+
+  <hr />
+
+  <p>
+    With running a few commands we will be able to automagically migrate these
+    "old" mechanisms to the new <code> input()</code>, <code>output()</code>,
+    <code>inject()</code> and control flow blocks using <code>&#64;if</code>,
+    <code>&#64;for</code> and <code>&#64;switch</code>.
+  </p>
+
+  <h2 id="example-setup">Example Setup</h2>
+
+  <p>
+    Our example project can be found on <a
+    href="https://github.com/samvloeberghs/kwerri-oss/tree/main/apps/migrate-angular-v17-plus">Github</a>.
+    It is a very minimal counter Angular project that has 2 inputs, 2 outputs, some state
+    service that holds a signal with the current count. Based on the current count
+    we show some information and derived values.
+    The result of running all the migrations can be found in another branch.
+  </p>
+
+  <h2 id="migration-commands">Migration commands</h2>
+
+  <p>
+    For updating each of the concepts, we have separate commands that will
+    migrate our code automatically.
+  </p>
+
+  <h3 id="constructor-injection-to-inject-function">Constructor injection to inject function</h3>
+
+  <h3 id="control-flow-syntax">Control flow syntax</h3>
+
+  <h3 id="annotated-input-to-signal-input">Annotated &#64;Input to signal input</h3>
+
+  <h3 id="annotated-output-to-signal-output">Annotated &#64;Output to signal output</h3>
+
+  <h2 id="conclusion">Conclusion</h2>
+
+  <p>
+    With these simple commands provided by the Angular team and the maintainers
+    of <code>ngxtension</code> we can easily migrate our Angular projects to
+    keep them up-to-date and be aligned with the new standards.
+  </p>
+
+  <h2 id="further-reading">Further reading</h2>
+
+  <ol class="post__further-reading">
+    <li>
+      <a
+        href="https://www.stevefenton.co.uk/blog/2013/04/stop-manually-assigning-typescript-constructor-parameters/"
+        target="_blank"
+        rel="noopener"
+      >
+        Stop manually assigning TypeScript constructor parameters
+      </a>
+    </li>
+  </ol>
+</section>

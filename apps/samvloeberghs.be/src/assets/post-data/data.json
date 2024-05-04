@@ -1,5 +1,14 @@
 [
   {
+    "title": "Migrating Angular v17+ to signal inputs, signal outputs, control flow and more",
+    "slug": "migrating-angular-v17-plus-to-signal-inputs-outputs-control-flow-and-more",
+    "publishDatetime": "2024-05-10T09:00:00+02:00",
+    "author": "Sam Vloeberghs",
+    "img": "/assets/share/posts/angular.png",
+    "imgShare": "/assets/share/posts/angular_share.jpg",
+    "short": "The latest versions of Angular have had massive improvements with the new control flow, signal support and other new features! Learn how to migrate your Angular v17+ application to the new signal inputs, signal outputs, control flow and more!"
+  },
+  {
     "title": "Calling the transform method of an Angular Pipe in the component class code",
     "slug": "calling-the-transform-method-of-an-angular-pipe-in-the-component-class-code",
     "publishDatetime": "2023-09-30T09:00:00+02:00",
@@ -76,7 +85,7 @@
     "author": "Sam Vloeberghs",
     "img": "/assets/share/posts/angular.png",
     "imgShare": "/assets/share/posts/angular_share.jpg",
-    "short": "This article and guide is intented to help anybody using Angular v9 getting started with Server-side-rendering (SSR) and prerendering their application."
+    "short": "This article and guide is intended to help anybody using Angular v9 getting started with Server-side-rendering (SSR) and prerendering their application."
   },
   {
     "title": "Lessons learned on offline capabilities with service workers using Workbox - The sequel",
