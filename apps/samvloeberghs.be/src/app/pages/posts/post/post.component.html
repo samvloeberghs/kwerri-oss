@@ -11,7 +11,7 @@
         <p class="post__posted">
           Posted on
           <time [attr.datetime]="post.publishDatetime">{{ post.publishDatetime | date:'fullDate'}}</time>
-          @if (!!post.updateDatetime && post.publishDatetime != post.updateDatetime) {
+          @if (!!post.updateDatetime && post.publishDatetime !== post.updateDatetime) {
             <span>
               <em>
                 <br/>

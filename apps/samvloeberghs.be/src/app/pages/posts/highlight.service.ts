@@ -15,7 +15,7 @@ import 'prismjs/components/prism-scss';
 import { DOCUMENT } from '@angular/common';
 import { Observable } from 'rxjs';
 
-declare var Prism: any;
+declare const Prism: any;
 
 @Injectable()
 export class HighlightService {
