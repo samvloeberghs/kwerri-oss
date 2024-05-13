@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 
 import { CurrentCountComponent } from '../components/current-count/current-count.component';
 import { OperationsComponent } from '../components/operations/operations.component';
@@ -18,9 +18,7 @@ export class AppComponent {
     return [...Array(Math.abs(currentCount)).keys()].map((e) => (e + 1) * fix);
   });
 
-  constructor(public readonly stateService: StateService) {
-
-  }
+  constructor(public readonly stateService: StateService) {}
 
   public increment() {
     this.stateService.count.update((count) => count + 1);
@@ -29,5 +27,4 @@ export class AppComponent {
   public decrement() {
     this.stateService.count.update((count) => count - 1);
   }
-
 }

@@ -16,12 +16,12 @@
 
   <ng-container [ngSwitch]="count">
     <div *ngSwitchCase="0">There are 0 numbers</div>
-    <div *ngSwitchCase="1">There is only 1 number: <code>{{ count }}</code></div>
-    <div *ngSwitchCase="-1">There is only 1 number: <code>{{ count }}</code></div>
+    <div *ngSwitchCase="1">There is only 1 number: {{ count }}</div>
+    <div *ngSwitchCase="-1">There is only 1 number: {{ count }}</div>
     <div *ngSwitchDefault>
       There are multiple numbers
       <ul>
-        <li *ngFor="let i of numbers"><code>{{ i }}</code></li>
+        <li *ngFor="let i of numbers">{{ i }}</li>
       </ul>
     </div>
   </ng-container>

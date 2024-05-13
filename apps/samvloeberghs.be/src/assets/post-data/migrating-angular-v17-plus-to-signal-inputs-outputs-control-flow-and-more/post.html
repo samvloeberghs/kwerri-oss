@@ -3,27 +3,24 @@
 
   <p>
     This article is intended to help anybody willing to migrate their Angular
-    v17+ project to use signal inputs, signal outputs, the new control
-    flow and inject function.
+    v17+ project to use <em>signal inputs</em>, <em>signal outputs</em>, the new <em>control
+    flow syntax</em> and <em>inject</em> function.
+  </p>
+  <p>
+    It does not focus on the specifics of these concepts, just how you can migrate to them.
+    If you want to learn more about them, please check the "Further reading" section at the bottom of this page.
   </p>
 
   <h2 id="introduction">Introduction</h2>
 
   <p>
     We start with a very simple example of a project that uses the well known
-    <code>&#64;Input()</code> annotaton for component inputs and
+    <code>&#64;Input()</code> annotation for component inputs and
     <code>&#64;Output()</code> for component outputs. Besides that we have a
     service that is injected using constructor arguments and we are using the
     typical <code>*ngIf</code>, <code>*ngFor</code> and <code>*ngSwitch</code>
     structural directives to control the data rendering in our components.
   </p>
-
-  <hr />
-
-  <img src="/assets/post-data/migrating-angular-v17-plus-to-signal-inputs-outputs-control-flow-and-more/example-project.png"
-       alt="Example Project"/>
-
-  <hr />
 
   <p>
     With running a few commands we will be able to automagically migrate these
@@ -38,25 +35,291 @@
     Our example project can be found on <a
     href="https://github.com/samvloeberghs/kwerri-oss/tree/main/apps/migrate-angular-v17-plus">Github</a>.
     It is a very minimal counter Angular project that has 2 inputs, 2 outputs, some state
-    service that holds a signal with the current count. Based on the current count
+    service that holds a writable signal with the current count. Based on the current count
     we show some information and derived values.
-    The result of running all the migrations can be found in another branch.
+  </p>
+
+  <p>
+    The fully migrated project can be found on a separate branch called <code>migrate-to-angular-v17-plus</code>.
+    See <a href="https://github.com/samvloeberghs/kwerri-oss/tree/migrate-to-angular-v17-plus" target="_blank">my Github
+    repository</a> and/or the <a href="https://github.com/samvloeberghs/kwerri-oss/tree/migrate-to-angular-v17-plus"
+                                 target="_blank">diff with the main branch</a> for more details.
   </p>
 
   <h2 id="migration-commands">Migration commands</h2>
 
   <p>
-    For updating each of the concepts, we have separate commands that will
-    migrate our code automatically.
+    For updating each of the concepts we have separate commands that will
+    migrate our code automatically. But before we continue, we need to install a
+    new dependency called <a target="_blank" href="https://ngxtension.netlify.app/getting-started/installation/"><code>ngxtension</code></a>.
+    This very neat library of migration schematics and other helper utilities will help us migrate to the new Angular
+    v17+ standards.
   </p>
 
-  <h3 id="constructor-injection-to-inject-function">Constructor injection to inject function</h3>
+  <pre><code class="language-bash">npx ng add ngxtension</code></pre>
+
+  <p>
+    Let's get started!
+  </p>
 
   <h3 id="control-flow-syntax">Control flow syntax</h3>
 
+  <p>
+    In the HTML of our components we use structural directives such as <code>*ngIf</code>, <code>*ngFor</code> and
+    <code>*ngSwitch</code>, but before they can be used, they need to be imported first. Since standalone components,
+    we can import them separately in the component's or through the <code>CommonModule</code>.
+  </p>
+
+  <h4 class="codetitle">Component HTML code</h4>
+  <pre><code class="language-html">&lt;ng-container *ngIf=&quot;count === 0; else notZero&quot;&gt;
+  The count is zero.. :(
+&lt;/ng-container&gt;
+&lt;ng-template #notZero&gt;
+  The count is not zero!
+&lt;/ng-template&gt;
+  ...
+&lt;ng-container [ngSwitch]=&quot;count&quot;&gt;
+  &lt;div *ngSwitchCase=&quot;0&quot;&gt;There are 0 numbers&lt;/div&gt;
+  &lt;div *ngSwitchCase=&quot;1&quot;&gt;There is only 1 number:{{ count }}&lt;/div&gt;
+  &lt;div *ngSwitchCase=&quot;-1&quot;&gt;There is only 1 number:{{ count }};&lt;/div&gt;
+  &lt;div *ngSwitchDefault&gt;
+    There are multiple numbers:
+    &lt;ul&gt;
+      &lt;li *ngFor=&quot;let i of numbers&quot;&gt;{{ i }}&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/ng-container&gt;</code></pre>
+
+  <h4 class="codetitle">Component TypeScript code</h4>
+  <pre><code class="language-typescript">&#64;Component ({
+  standalone: true,
+  imports: [NgIf, NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault],
+  // imports: [CommonModule],
+  selector: 'app-current-count',
+  templateUrl: './current-count.component.html',
+  styleUrl: './current-count.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})</code></pre>
+
+  <p>
+    For this migration we don't need the <code>&#64;ngxextension</code> library yet.
+    To migrate to the new control flow syntax, we need to run the following
+    migration command provided by the Angular CLI. If we want to migrate just
+    a part of our codebase, we can specify the path to limit the migration to:
+  </p>
+
+  <h4 class="codetitle">Control flow migration command</h4>
+  <pre><code class="language-bash">npx ng g &#64;angular/core:control-flow
+npx ng g &#64;angular/core:control-flow --path=libs/feature-xyz</code></pre>
+
+  <p>
+    After running this command the imports for the structural directives will be
+    removed as this functionality is available through the compiler directly.
+    Our HTML code from above will be transformed to:
+  </p>
+
+  <h4 class="codetitle">Migrated HTML code</h4>
+  <pre><code class="language-html">@if (count === 0) {
+  The count is zero.. :(
+} @else {
+  The count is not zero!
+}
+...
+@switch (count) {
+  @case (0) {
+    &#x3C;div&#x3E;There are 0 numbers&#x3C;/div&#x3E;
+  }
+  @case (1) {
+    &#x3C;div&#x3E;There is only 1 number: {{ count }}&#x3C;/div&#x3E;
+  }
+  @case (-1) {
+    &#x3C;div&#x3E;There is only 1 number: {{ count }}&#x3C;/code&#x3E;&#x3C;/div&#x3E;
+  }
+  @default {
+    &#x3C;div&#x3E;
+      There are multiple numbers
+      &#x3C;ul&#x3E;
+        @for (i of numbers; track i) {
+          &#x3C;li&#x3E;{{ i }}&#x3C;/li&#x3E;
+        }
+      &#x3C;/ul&#x3E;
+    &#x3C;/div&#x3E;
+  }
+}</code></pre>
+
+
+  <h4 id="extra-trick-empty-block">Extra trick: <code>&#64;empty</code> block</h4>
+
+  <p>
+    With the new control flow syntax, we can use the <code>&#64;empty</code> block to
+    handle the case where the list of items to iterate over is empty. This means
+    no more checking for an empty list with an <code>*ngIf</code> or even
+    <code>&#64;if</code> condition check first:
+  </p>
+
+  <h4 class="codetitle">&#64;empty block example</h4>
+  <pre><code class="language-html">&lt;section id=&quot;blogposts&quot;&gt;
+  &lt;h1&gt;Blogposts&lt;/h1&gt;
+  @for (blogpost of blogposts; track blogposts.id) {
+    &lt;article&gt;
+      &lt;h2&gt;{{ blogpost.title }}&lt;/h2&gt;
+      &lt;p&gt;{{ blogpost.introduction }}&lt;/p&gt;
+    &lt;/article&gt;
+  } @empty {
+    &lt;p&gt;No blogposts available&lt;/p&gt;
+  }
+&lt;/section&gt;</code></pre>
+
   <h3 id="annotated-input-to-signal-input">Annotated &#64;Input to signal input</h3>
 
+  <p>
+    Migrating to the new signal inputs is easy with the help of the <code>ngxtension</code> library. We can run the
+    following command to migrate our <code>&#64;Input()</code> annotated properties to the new signal input syntax.
+    Same as with the control flow migration, we can specifiy a path to limit the migration to a subdirectory or file in
+    our project.
+  </p>
+
+  <h4 class="codetitle">Signal inputs migration command</h4>
+  <pre><code class="language-bash">npx ng g ngxtension:convert-signal-inputs
+npx ng g ngxtension:convert-signal-inputs --path=libs/feature-xyz</code></pre>
+
+  <p>
+    This results in the code transforming from:
+  </p>
+
+  <h4 class="codetitle">Annotated &#64;Input</h4>
+  <pre><code class="language-typescript">import { Input } from '&#64;angular/core';
+...
+export class CurrentCountComponent {
+  @Input() count: number = 0;
+  @Input() numbers: number[] = [];
+}
+</code></pre>
+
+  <p>
+    To the new signal input syntax:
+  </p>
+
+  <h4 class="codetitle">Signal inputs</h4>
+  <pre><code class="language-typescript">import { input } from '&#64;angular/core';
+...
+export class CurrentCountComponent {
+  count = input<number>(0);
+  numbers = input<number[]>([]);
+}
+</code></pre>
+
   <h3 id="annotated-output-to-signal-output">Annotated &#64;Output to signal output</h3>
+
+  <p>
+  Similar steps and options apply to the migration of annotated &#64;Outputs to signal based outputs.
+  </p>
+
+  <h4 class="codetitle">Signal outputs migration command</h4>
+  <pre><code class="language-bash">npx ng g ngxtension:convert-outputs
+npx ng g ngxtension:convert-outputs --path=libs/feature-xyz</code></pre>
+
+  <p>
+    This results in the code transforming from:
+  </p>
+
+  <h4 class="codetitle">Annotated &#64;Output</h4>
+  <pre><code class="language-typescript">import { Output } from '&#64;angular/core';
+...
+export class OperationsComponent {
+  @Output() increment = new EventEmitter<void>();
+  @Output() decrement = new EventEmitter<void>();
+}
+</code></pre>
+
+  <p>
+    To the new signal based outputs. Note that both <code>input</code> and <code>output</code> are exported
+    from the same package, namely <code>&#64;angular/core</code>, with just a subtle difference;
+    lower input/output instead of Input/Output:
+  </p>
+
+  <h4 class="codetitle">Signal outputs</h4>
+  <pre><code class="language-typescript">import { output } from '&#64;angular/core';
+...
+export class OperationsComponent {
+  increment = output<void>();
+  decrement = output<void>();
+}
+</code></pre>
+
+  <h3 id="annotated-queries">Annotated Queries</h3>
+
+  <p>
+    To make sure we have a uniform experience with signals, starting from Angular v17, we can also migrate to signal
+    based queries using the <code>ngxtension</code> tooling library.
+  </p>
+
+  <h4 class="codetitle">Signal queries migration command</h4>
+  <pre><code class="language-bash">npx ng g ngxtension:convert-queries
+npx ng g ngxtension:convert-queries --path=libs/feature-xyz</code></pre>
+
+  <p>
+    The following code, querying a list of images in our component, will be transformed from:
+  </p>
+
+  <h4 class="codetitle">Signal outputs</h4>
+  <pre><code class="language-typescript">export class AppComponent {
+  @ViewChildren('my-images') myImages: QueryList<ElementRef<HTMLImageElement>>;
+}
+</code></pre>
+
+  <p>
+    into:
+  </p>
+
+  <h4 class="codetitle">Signal outputs</h4>
+  <pre><code class="language-typescript">export class AppComponent {
+  myImages = viewChildren<ElementRef<HTMLImageElement>>('my-images');
+}
+</code></pre>
+
+  <p>
+    Read more in the documentation of <a href="https://ngxtension.netlify.app/utilities/migrations/queries-migration/"
+                                         target="_blank">&#64;ngxtension</a> for examples and more.
+  </p>
+
+
+  <h3 id="constructor-injection-to-inject-function">Constructor injection to inject function</h3>
+
+  <p>
+    While this is not a v17+ specific feature, but available from v14, it is worth highlighting.
+    In Angular you can make use of the TypeScript <code>constructor</code> to inject services into your components.
+    The compiler will then apply it's magic to run the dependency injection mechanism to make sure you get the right
+    instance of the provided arguments.
+  </p>
+  <p>
+    The syntax in the code snippet below makes the <code>stateService</code> publicly available
+    on the instance of the app component class.
+  </p>
+
+  <h4 class="codetitle">Component TypeScript code</h4>
+  <pre><code class="language-typescript">export class AppComponent {
+  constructor(public readonly stateService: StateService) { }
+}</code></pre>
+
+  <p>
+    The only requirement here is that the class that you are injecting has the <code>@Injectable</code> annotation or is
+    provided manually. To run the migration we can again leverage the <code>ngxtension</code> library:
+  </p>
+
+  <h4 class="codetitle">Inject function migration command</h4>
+  <pre><code class="language-bash">npx ng g ngxtension:convert-di-to-inject
+npx ng g ngxtension:convert-di-to-inject --path==libs/feature-xyz</code></pre>
+
+  <p>
+    Running the command above will result in the following code transformation:
+  </p>
+
+  <h4 class="codetitle">Component TypeScript code</h4>
+  <pre><code class="language-typescript">export class AppComponent {
+  public readonly stateService = inject(StateService);
+}</code></pre>
+
 
   <h2 id="conclusion">Conclusion</h2>
 
@@ -71,11 +334,56 @@
   <ol class="post__further-reading">
     <li>
       <a
-        href="https://www.stevefenton.co.uk/blog/2013/04/stop-manually-assigning-typescript-constructor-parameters/"
+        href="https://blog.angular.io/meet-angulars-new-control-flow-a02c6eee7843"
         target="_blank"
         rel="noopener"
       >
-        Stop manually assigning TypeScript constructor parameters
+        Meet Angular’s New Control Flow
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://blog.angular.io/introducing-angular-v17-4d7033312e4b#1d6b"
+        target="_blank"
+        rel="noopener"
+      >
+        Introducing Angular v17
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://ngxtension.netlify.app/utilities/migrations/inject-migration/"
+        target="_blank"
+        rel="noopener"
+      >
+        inject() Migration
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://ngxtension.netlify.app/utilities/migrations/new-outputs-migration/"
+        target="_blank"
+        rel="noopener"
+      >
+        New output() Migration
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://ngxtension.netlify.app/utilities/migrations/signal-inputs-migration/"
+        target="_blank"
+        rel="noopener"
+      >
+        Signal Inputs Migration
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://ngxtension.netlify.app/utilities/migrations/queries-migration/"
+        target="_blank"
+        rel="noopener"
+      >
+        Queries Migration
       </a>
     </li>
   </ol>
