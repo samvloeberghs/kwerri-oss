@@ -155,7 +155,8 @@
           "/posts/whats-with-the-subjects-in-rxjs5",
           "/posts/nx-workspaces-target-defaults",
           "/posts/changing-or-mocking-your-time-zone-in-the-browser",
-          "/posts/calling-the-transform-method-of-an-angular-pipe-in-the-component-class-code"
+          "/posts/calling-the-transform-method-of-an-angular-pipe-in-the-component-class-code",
+          "/posts/migrating-angular-v17-plus-to-signal-inputs-outputs-control-flow-and-more"
         ]
       },
       "configurations": {
