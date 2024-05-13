@@ -32,25 +32,25 @@
 <noscript>
     <style>
         @media (max-width: 920px) {
-            .app__aside {
+            sv-root .app__aside {
                 height: 100%;
                 position: static !important;
                 margin-bottom: 0;
             }
 
-            .app__mobilenavcontainer {
+            sv-root .app__mobilenavcontainer {
                 display: block;
             }
 
-            .app__mobilemenu {
+            sv-root .app__mobilemenu {
                 display: none !important;
             }
 
-            .app__content {
+            sv-root .app__content {
                 padding-top: 20px !important;
             }
 
-            .app__scrolltocontent {
+            sv-root .app__scrolltocontent {
                 display: block !important;
             }
         }
@@ -81,12 +81,6 @@
 
     (function () {
         if (document && document.querySelector('sv-root[ng-server-context="ssg"]')) {
-            // *: newversion available
-            var updateVersion = document.querySelector('.app__new-version-available-msg');
-            updateVersion.addEventListener('click', function (event) {
-                event.preventDefault();
-            })
-
             // *: mobilenav
             var mobileNavHamburger = document.querySelector('.app__mobilemenu');
             var aside = document.querySelector('.app__aside');

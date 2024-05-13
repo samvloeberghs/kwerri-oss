@@ -28,7 +28,6 @@ export class AppComponent implements OnInit{
   public mobileNavToggled = false;
 
   public ngOnInit(): void {
-    this.seoSocialShareService.setFbAppId(environment.facebookAppId);
     this.seoSocialShareService.setTwitterSiteCreator(environment.twitterSiteCreator);
     this.seoSocialShareService.setTwitterCard('summary_large_image');
   }
