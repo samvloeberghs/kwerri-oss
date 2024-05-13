@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -7,9 +7,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-current-count',
   templateUrl: './current-count.component.html',
   styleUrl: './current-count.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrentCountComponent {
-  @Input() count: number = 0;
-  @Input() numbers: number[] = [];
+  count = input<number>(0);
+  numbers = input<number[]>([]);
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -6,9 +6,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
   selector: 'app-operations',
   templateUrl: './operations.component.html',
   styleUrl: './operations.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperationsComponent {
-  @Output() increment = new EventEmitter<void>();
-  @Output() decrement = new EventEmitter<void>();
+  increment = output<void>();
+  decrement = output<void>();
 }

@@ -1,28 +1,37 @@
 <div>
-  <strong>Current count:</strong>&nbsp;<code>{{ count }}</code>
+  <strong>Current count:</strong>&nbsp;<code>{{ count() }}</code>
 </div>
 
 <div>
-  <ng-container *ngIf="count === 0; else notZero">
+  @if (count() === 0) {
     The count is zero.. :(
-  </ng-container>
-  <ng-template #notZero>
+  } @else {
     The count is not zero!
-  </ng-template>
+  }
 </div>
 <hr />
 <div>
   <div><strong>Derived numbers:</strong></div>
 
-  <ng-container [ngSwitch]="count">
-    <div *ngSwitchCase="0">There are 0 numbers</div>
-    <div *ngSwitchCase="1">There is only 1 number: {{ count }}</div>
-    <div *ngSwitchCase="-1">There is only 1 number: {{ count }}</div>
-    <div *ngSwitchDefault>
-      There are multiple numbers
-      <ul>
-        <li *ngFor="let i of numbers">{{ i }}</li>
-      </ul>
-    </div>
-  </ng-container>
+  @switch (count()) {
+    @case (0) {
+      <div>There are 0 numbers</div>
+    }
+    @case (1) {
+      <div>There is only 1 number: {{ count() }}</div>
+    }
+    @case (-1) {
+      <div>There is only 1 number: {{ count() }}</div>
+    }
+    @default {
+      <div>
+        There are multiple numbers
+        <ul>
+          @for (i of numbers(); track i) {
+            <li>{{ i }}</li>
+          }
+        </ul>
+      </div>
+    }
+  }
 </div>
