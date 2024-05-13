@@ -1,0 +1,29 @@
+{
+  "name": "migrate-angular-v17-plus-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/migrate-angular-v17-plus-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["migrate-angular-v17-plus"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/migrate-angular-v17-plus-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "migrate-angular-v17-plus:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "migrate-angular-v17-plus:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "migrate-angular-v17-plus:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

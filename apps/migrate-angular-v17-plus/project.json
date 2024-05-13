@@ -1,0 +1,88 @@
+{
+  "name": "migrate-angular-v17-plus",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/migrate-angular-v17-plus/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/migrate-angular-v17-plus",
+        "index": "apps/migrate-angular-v17-plus/src/index.html",
+        "browser": "apps/migrate-angular-v17-plus/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/migrate-angular-v17-plus/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/migrate-angular-v17-plus/src/favicon.ico",
+          "apps/migrate-angular-v17-plus/src/assets"
+        ],
+        "styles": ["apps/migrate-angular-v17-plus/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "migrate-angular-v17-plus:build:production"
+        },
+        "development": {
+          "buildTarget": "migrate-angular-v17-plus:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "migrate-angular-v17-plus:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/migrate-angular-v17-plus/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "migrate-angular-v17-plus:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/migrate-angular-v17-plus/browser",
+        "spa": true
+      }
+    }
+  }
+}
