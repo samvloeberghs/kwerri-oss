@@ -116,4 +116,9 @@
     <lastmod>2023-09-30T22:00:00+02:00</lastmod>
     <priority>0.64</priority>
   </url>
+  <url>
+    <lastmod>2024-05-14T22:00:00+02:00</lastmod>
+    <loc>https://samvloeberghs.be/posts/migrating-angular-v17-plus-to-signal-inputs-outputs-control-flow-and-more/</loc>
+    <priority>0.64</priority>
+  </url>
 </urlset>

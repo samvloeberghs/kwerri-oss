@@ -175,13 +175,14 @@ npx ng g &#64;angular/core:control-flow --path=libs/feature-xyz</code></pre>
   <p>
     Migrating to the new signal inputs is easy with the help of the <code>ngxtension</code> library. We can run the
     following command to migrate our <code>&#64;Input()</code> annotated properties to the new signal input syntax.
-    Same as with the control flow migration, we can specifiy a path to limit the migration to a subdirectory or file in
-    our project.
+    Same as with the control flow migration, we can specify a path to limit the migration to component or directive file in
+    our project. Alternatively, we can target a specific project as well.
   </p>
 
   <h4 class="codetitle">Signal inputs migration command</h4>
   <pre><code class="language-bash">npx ng g ngxtension:convert-signal-inputs
-npx ng g ngxtension:convert-signal-inputs --path=libs/feature-xyz</code></pre>
+npx ng g ngxtension:convert-signal-inputs --path=libs/feature-xyz/my-component.component.ts
+npx ng g ngxtension:convert-signal-inputs --project=feature-xyz</code></pre>
 
   <p>
     This results in the code transforming from:
@@ -217,7 +218,8 @@ export class CurrentCountComponent {
 
   <h4 class="codetitle">Signal outputs migration command</h4>
   <pre><code class="language-bash">npx ng g ngxtension:convert-outputs
-npx ng g ngxtension:convert-outputs --path=libs/feature-xyz</code></pre>
+npx ng g ngxtension:convert-outputs --path=libs/feature-xyz/my-component.component.ts
+npx ng g ngxtension:convert-outputs --project=feature-xyz</code></pre>
 
   <p>
     This results in the code transforming from:
@@ -256,7 +258,8 @@ export class OperationsComponent {
 
   <h4 class="codetitle">Signal queries migration command</h4>
   <pre><code class="language-bash">npx ng g ngxtension:convert-queries
-npx ng g ngxtension:convert-queries --path=libs/feature-xyz</code></pre>
+npx ng g ngxtension:convert-queries --path=libs/feature-xyz/my-component.component.ts
+npx ng g ngxtension:convert-queries --project=feature-xyz</code></pre>
 
   <p>
     The following code, querying a list of images in our component, will be transformed from:
@@ -309,7 +312,8 @@ npx ng g ngxtension:convert-queries --path=libs/feature-xyz</code></pre>
 
   <h4 class="codetitle">Inject function migration command</h4>
   <pre><code class="language-bash">npx ng g ngxtension:convert-di-to-inject
-npx ng g ngxtension:convert-di-to-inject --path==libs/feature-xyz</code></pre>
+npx ng g ngxtension:convert-di-to-inject --path==libs/feature-xyz/my-component.component.ts
+npx ng g ngxtension:convert-di-to-inject --project==feature-xyz</code></pre>
 
   <p>
     Running the command above will result in the following code transformation:
