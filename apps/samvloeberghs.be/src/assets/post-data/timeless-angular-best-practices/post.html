@@ -13,12 +13,11 @@
     In short we can say that a Best Practice is a
     <strong>generally accepted solution to a problem</strong> that has organically grown
     over years of trial and error. This means that those practices were not invented instantly. They all started with a
-    small guideline and evolved, to become better over time based on feedback of their adopters
-    They are also clearly superior to their known alternatives.
+    small guideline and evolved, to become better over time based on feedback of their adopters.
   </p>
 
   <p>
-    Besides that, best practices are constantly being challenged. Not only by their adopters but also by other best
+    They are also clearly superior to their known alternatives and besides that, best practices are constantly being challenged. Not only by their adopters but also by other best
     practices and methodologies. .
   </p>
 
@@ -44,11 +43,7 @@
     <li>Creating accessible applications</li>
   </ul>
 
-  <p>
-    Let’s start with staying up-to-date.
-  </p>
-
-  <h2 id="staying-up-to-date">Staying Up-to-date</h2>
+  <h2 id="staying-up-to-date">Staying up-to-date</h2>
 
   <p>
     Staying up-to-date is sometimes the most easy best practice.
@@ -84,7 +79,7 @@
     Then why not just use <code>qrcode</code> package and wrap it yourself if needed?
     It will make you stay in full control of the upgrade-path of this dependency.
 
-    But nothing but respect for the owner of this package, because these kind of packages can give good examples on how to wrap 3rd party packages.
+    But nothing but respect for the owner of this package, because these kind of packages can give prime examples on how to wrap 3rd party dependencies.
   </p>
 
   <h3 id="knowing-how-and-how-to-upgrade">Knowing how and when to upgrade</h3>
@@ -148,15 +143,126 @@ npm update ( --save-dev / --save )</code></pre>
 
   <h2 id="security">Security</h2>
 
+  <p>
+    As you might already know, Angular has build-in security protection against the most common
+    vulnerabilities.
+  </p>
+
+  <p>
+    And it sure ain’t security through obscurity! Because obviously, all parts of our FE code are always visible to any
+    visitor of the web application.
+  </p>
+  <p>
+    Angular does however protect us against attacks such as cross site scripting and cross site request forgery. And one
+    of the best ways to stay secure is by keeping up-to-date with your dependencies. But we got that covered already.
+  </p>
+
   <p></p>
 
   <h3 id="preventing-xss">Preventing Cross Site Scripting (XSS)</h3>
 
-  <p></p>
+  <p>
+    XSS is one of the most common attacks on the web.
+    It happens when attackers are able to execute injected code on your applications.
+  </p>
+
+  <p>
+    <a href="https://angular.dev/best-practices/security#direct-use-of-the-dom-apis-and-explicit-sanitization-calls" target="_blank">Angular treats all values as untrusted by default</a> and sanitises them when they are injected into the DOM or executed
+    as part of your JavaScript. So if there is an attack it most probably means the developer made it possible.
+  </p>
+  <p>
+    If you do need to inject content such as HTML or CSS or JS directly, you can use the <code>DomSanitizer</code> utility class
+    provided by Angular. Only do this if you are sure you are protected against XSS attacks through a different
+    mechanism. For example you have checks in place to escape any content before it gets injected into your database and returned
+    back to the browser.
+  </p>
+
+  <h4 class="codetitle">Using the Dom Sanitizer</h4>
+  <pre><code class="language-ts">import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeUrl } from '&#64;angular/platform-browser';
+
+&#64;Component({
+  standalone: true,
+  selector: 'my-component',
+  template: `&lt;div [outerHTML]=&quot;html&quot;&gt;&lt;/div&gt;
+&lt;script [src]=&quot;js&quot;&gt;&lt;/script&gt;
+&lt;a [href]=&quot;html&quot;&gt;SamV Website&lt;/a&gt;`,
+  })
+export class AppComponent {
+  url: SafeUrl;
+  js: SafeResourceUrl;
+  html: SafeHtml;
+  readonly #domSanitizer = inject(DomSanitizer);
+
+  constructor(){
+    this.url = this.#domSanitizer.bypassSecurityTrustUrl('https://samv.pro');
+    this.js = this.#domSanitizer.bypassSecurityTrustResourceUrl('https://samv.pro/code.js');
+    this.html = this.#domSanitizer.bypassSecurityTrustHtml('<h1>SamV</h1>');
+    /* And others like
+      - bypassSecurityTrustScript
+      - bypassSecurityTrustStyle
+     */
+  }
+}</code></pre>
+
+  <p>
+    In that case you can use libraries such as <a href="https://github.com/cure53/DOMPurify" target="_blank">DOMPurify</a> or <a
+    href="https://www.npmjs.com/package/sanitize-html" target="_blank">Sanitize HTML</a> to do the heavy lifting of
+    sanitising for you. Each modern framework in the backend space has a package available to handle that for you.
+  </p>
+  <p>
+    There are other and more detailed ways to protect yourself against these kinds of attacks, like <a
+    href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank">Content Security
+    Policy</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API" target="_blank">Trusted
+    Types</a>.
+  </p>
 
   <h3 id="preventing-xsrf">Preventing Cross Site Request Forgery (XSRF)</h3>
 
-  <p></p>
+  <p>
+    There are 2 HTTP level vulnerabilities for which Angular has build-in prevention mechanisms. Cross Site Request Forgery (XSRF) and Cross Site Script Inclusion (XSSI).
+  </p>
+  <p>
+    In this article I will focus on XSRF as XSSI became irrelevant when Angular dropped support for non-modern browsers like Internet Explorer.
+    The XSSI attack has been made a lot harder by modern browsers by applying the <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">same origin policy</a> by default.
+  </p>
+  <p>
+    Cross Site Request Forgery can be easily mitigated by sending a nonce from the server in a cookie to the client and back to the server on request headers. The value has to be same or the request can be ignored.
+    This also works because of same origin policies, where other domains can’t read out this cookie.
+    Although this is mostly a server side technique, Angular has build in support for the client side part.
+    </p>
+
+  <h4 class="codetitle">Configuring XSRF in Angular</h4>
+  <pre><code class="language-ts">import {
+    provideHttpClient,
+    withNoXsrfProtection,
+    withXsrfConfiguration
+} from '&#64;angular/common/http';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideHttpClient(
+      // setup with custom cookie/header name
+      withXsrfConfiguration({
+        cookieName: 'MY-XSRF-TOKEN',
+        headerName: 'X-MY-XSRF-TOKEN',
+      }),
+      // OR; to complete disable it
+      withNoXsrfProtection()
+    ),
+  ]
+})	</code></pre>
+
+  <p>
+    Just use the <code>withXsrfConfiguration</code> function call to configure the HTTP client during bootstrap of your application.
+    You can provide your own cookie and header names if you wish to override the default names.
+  </p>
+
+  <h3 id="google-bug-hunting-community">Google's Bug Hunting Community</h3>
+
+  <p>
+    And if you do find a security bug that is related to the framework directly, you might get yourself a nice bonus. Because Angular is part of the Google Open Source Software Vulnerability Reward.
+    So if you believe to have found a major issue, be sure to <a href="https://bughunters.google.com/report" target="_blank">report it</a>!
+  </p>
 
   <h2 id="a11y">Accessibility - a11y</h2>
 
@@ -188,7 +294,7 @@ npm update ( --save-dev / --save )</code></pre>
   <p>
     Another perhaps more well known example is <code>aria-label</code>. In the second code example below, the button has no textual
     content, but an SVG representing a cross to indicate that this button is used to close something. A screen reader
-    can’t interpret the SVG so the aria label indicates its meaning in full text.
+    can’t interpret the SVG so the <code>aria-label</code> indicates its meaning in full text.
   </p>
 
   <h4 class="codetitle">aria-label and aria-hidden example in Angular</h4>
@@ -224,8 +330,8 @@ npm update ( --save-dev / --save )</code></pre>
   <h3 id="live-announcer">Use the live announcer</h3>
 
   <p>
-    If you want more control beyond HTML markup in your application code to announce updates, you can also use the LiveAnnouncer provided by the Angular CDK.
-    The Live announcer uses similar techniques as with the aria-live attribute but will handle that magic for you underneath.
+    If you want more control beyond HTML markup in your application code to announce updates, you can also use the <code>LiveAnnouncer</code> provided by the Angular CDK.
+    The Live announcer uses similar techniques as with the <code>aria-live</code> attribute but will handle that magic for you underneath.
     You only need to call its API to make sure the screen reader reads your messages out loud.
   </p>
 
@@ -248,7 +354,7 @@ export class FormComponent {
   <h3 id="augmenting-native-elements">Augmenting native elements</h3>
 
   <p>
-    Another very important implementation error that I have seen multiple times in consulting on projects is trying to
+    Another very important implementation error that I have seen multiple times in consulting on projects is that developers are trying to
     reinvent the wheel. And it mostly resolves around buttons.
   </p>
   <p>
@@ -374,36 +480,77 @@ export class FormComponent {
 
   <h2 id="conclusion">Conclusion</h2>
 
-  <p></p>
+  <p>In this article we discussed 3 big topics of best practices in Angular, or in general applicable to any web
+    project. The first one is to make sure you can keep upgrading your applications to follow with the LTS version of
+    Angular. By not doing so you might miss up on important security updates.</p>
+  <p>Next to that there are some build-in framework security features like automatic sanitizing of content and
+    protecting against the most known security threats when communicating data over the internet like XSRF and XSS.</p>
+  <p>Finally, we learned about ways to optimize our applications for all users and making them accessible for most by applying aria attributes and controlling focus where needed.</p>
 
   <h2 id="further-reading">Further reading</h2>
 
   <ol class="post__further-reading">
     <li>
       <a
-        href=""
+        href="https://nx.dev/nx-api/nx/documents/migrate"
         target="_blank"
         rel="noopener"
       >
-        TODO
+        Migrations in NX
       </a>
     </li>
     <li>
       <a
-        href=""
+        href="https://docs.npmjs.com/cli/v10/commands/npm-outdated"
         target="_blank"
         rel="noopener"
       >
-        TODO
+        NPM outdated
       </a>
     </li>
     <li>
       <a
-        href=""
+        href="https://docs.npmjs.com/cli/v10/commands/npm-update"
         target="_blank"
         rel="noopener"
       >
-        TODO
+        NPM update
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://www.w3.org/WAI/standards-guidelines/wcag/"
+        target="_blank"
+        rel="noopener"
+      >
+        WCAG 2 Overview
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://bytearcher.com/articles/semver-explained-why-theres-a-caret-in-my-package-json"
+        target="_blank"
+        rel="noopener"
+      >
+       Why is there a caret in my package.json?
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions"
+        target="_blank"
+        rel="noopener"
+      >
+        ARIA Live regions
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://angular.io/guide/accessibility#augmenting-native-elements"
+        target="_blank"
+        rel="noopener"
+      >
+        Augmenting Native Elements
       </a>
     </li>
   </ol>

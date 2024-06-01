@@ -117,69 +117,6 @@ sv-root {
 
     }
 
-    &__new-version-available-msg {
-      color: #fff;
-      padding: 5px 10px;
-      font-size: 1.2em;
-      background: #f0433e;
-      cursor: pointer;
-      display: none;
-
-      @media (max-width: 378px) {
-        top: 16px !important;
-      }
-
-      @media (max-width: $mobile-max-bp) {
-        position: absolute;
-        top: 26px;
-        left: 80px;
-        right: 10px;
-        font-size: 1em;
-        z-index: 100;
-        width: calc(100% - 170px);
-
-        span {
-          display: inline-block;
-
-          &:first-child {
-            margin: {
-              right: 5px;
-            }
-          }
-        }
-      }
-
-      @media (min-width: $tablet-bp) {
-        position: absolute;
-        top: 65px;
-        left: 130px;
-
-        span {
-          display: block;
-        }
-
-        &:before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: -16px;
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 8px;
-          border-color: rgba(0, 0, 0, 0);
-          pointer-events: none;
-          margin-top: -8px;
-          transform: rotateY(0deg);
-          color: #f0433e;
-          border-right-color: #f0433e;
-        }
-      }
-      &--show {
-        display: inline-block;
-      }
-    }
-
     &__scrolltocontent {
       display: none;
 
@@ -324,12 +261,12 @@ sv-root {
         width: 280px;
         margin-left: 50px;
         padding-top: 50px;
-        border-right: 1px solid;
+        border-right: 3px solid;
         border-image: linear-gradient(
             to bottom,
             #eee,
             rgba(0, 0, 0, 0)
-        ) 1 100%;
+        ) 3 100%;
         border-left: 0;
         margin-bottom: 50px;
         overflow: auto;
