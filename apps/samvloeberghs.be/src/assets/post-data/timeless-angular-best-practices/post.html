@@ -1,0 +1,557 @@
+<section class="entry-content post-body" itemprop="articleBody">
+
+  <h2 id="introduction">Introduction</h2>
+
+  <p>
+    What are some of the best practices in Angular? And why should you care about them?
+    In this blog we will discuss timeless best practices that are applicable to any Angular project.
+  </p>
+
+  <h2 id="what-is-a-best-practise">What is a "Best Practise"</h2>
+
+  <p>
+    In short we can say that a Best Practice is a
+    <strong>generally accepted solution to a problem</strong> that has organically grown
+    over years of trial and error. This means that those practices were not invented instantly. They all started with a
+    small guideline and evolved, to become better over time based on feedback of their adopters.
+  </p>
+
+  <p>
+    They are also clearly superior to their known alternatives and besides that, best practices are constantly being challenged. Not only by their adopters but also by other best
+    practices and methodologies. .
+  </p>
+
+  <p>
+    A good example of such a best practise are the WCAG or Web Content Accessibility Guidelines. They
+    represents the globally recognized accessibility best practices on the internet and are maintained by the W3C.
+  </p>
+
+  <p>
+    <em>So what kind of best practices apply to Angular?</em>
+    Just to be clear; in this post we will not discuss how to organise our code or project architecture.
+    We will not focus on which state management system to use or not even on the current actual debates, like for
+    example signals versus observables.
+  </p>
+  <p>
+    Let’s talk more about some foundational basics that span across any kind of architectural setup or organisation of an
+    Angular project, or even any web project in general:
+  </p>
+
+  <ul>
+    <li>Staying up-to-date</li>
+    <li>Handling security</li>
+    <li>Creating accessible applications</li>
+  </ul>
+
+  <h2 id="staying-up-to-date">Staying up-to-date</h2>
+
+  <p>
+    Staying up-to-date is sometimes the most easy best practice.
+    But potentially also the hardest, as updating your project dependencies might be tricky!
+  </p>
+
+  <p>
+    For example because of 3rd party libraries that need to follow the upgrade cycles of Angular.
+    They need to publish a new version before they can be upgraded.
+  </p>
+
+  <p>
+    And even worse; sometimes maintainers abandon libraries or they temporarily lose focus.
+    With Angular moving so fast by publishing a new version each 6 months, breaking changes might occur every year. This requires maintainers to keep focus and follow the Angular releases.
+  </p>
+
+  <h3 id="avoiding-too-much-third-party-dependencies">Avoiding too much 3rd party dependencies</h3>
+
+  <p>
+    In general I recommend to avoid third party libraries for Angular as much as possible.
+    Well, not all of them obviously, you can’t code everything yourself. But especially the ones that are simple wrapper libraries around other javascript libraries.
+  </p>
+
+  <p>
+    For example <code>ng-qrcode</code> is a basic wrapper around the <code>qrcode</code> package.
+    It does not much more than just expose a component and directive that pass through the configuration for qrcode.
+    </p>
+
+  <img src="/assets/post-data/timeless-angular-best-practices/ng-qrcode.png"
+       alt="ng qrcode" style="display:block; margin-bottom: 2rem;"/>
+
+  <p>
+    Then why not just use <code>qrcode</code> package and wrap it yourself if needed?
+    It will make you stay in full control of the upgrade-path of this dependency.
+
+    But nothing but respect for the owner of this package, because these kind of packages can give prime examples on how to wrap 3rd party dependencies.
+  </p>
+
+  <h3 id="knowing-how-and-how-to-upgrade">Knowing how and when to upgrade</h3>
+
+  <p>
+    The general advice as a best practise I want to convey here is to make sure you can keep upgrading your Angular dependencies timely.
+    And if you can’t follow immediately, because of for example a lot of 3rd party dependencies, Angular has you covered. At least if you are using a LTS version.
+    </p>
+
+  <img src="/assets/post-data/timeless-angular-best-practices/upgrade-angular-lts.png"
+       alt="upgrade angular LTS" style="display:block; margin-bottom: 2rem;"/>
+
+  <p>
+    Important security release will be patched on each of those major versions that are in LTS. Currently that is v16 to v18, so be aware that v15 got kicked out of LTS only recently.
+    That gives you, and the maintainers of the other 3rd party libraries that you use, about 1 - 1.5years for making sure an upgrade is done timely.
+  </p>
+
+  <p></p>
+
+  <h3 id="tools-to-upgrade">Tools to upgrade</h3>
+
+  <p>
+    So how can you keep your project dependencies up-to-date? There are various ways to do that. Let’s consider the node
+    package manager as an example.
+    Just keep in mind that there are most probably similar tools available for yarn or pnpm.
+  </p>
+
+  <p>
+    If you want to focus on updating Angular dependencies you can use <code>ng update</code> through the Angular CLI.
+    If you use Nx and you want to migrate your Nx project to the latest Nx dependencies, you can use <code>nx migrate latest</code>.
+  </p>
+
+  <h4 class="codetitle">Upgrade Angular / NX related dependencies</h4>
+  <pre><code class="language-bash"># update all angular related dependencies
+npx ng update
+
+# update all nx related
+# + angular dependencies
+npx nx migrate latest</code></pre>
+
+  <p>
+    These 2 commands however only focus on the Angular or Nx related dependencies by default.
+    So let’s take it a step further. If you want to list all your current dependencies and their current, wanted and
+    latest version available you can use the <code>npm outdated</code> command. And if you just want to go and update your dependencies, use the <code>npm update</code> command.
+  </p>
+
+  <h4 class="codetitle">Upgrade any/all dependencies</h4>
+  <pre><code class="language-bash"># list your current dependencies and their
+# current / wanted / latest versions
+npm outdated
+
+# update all your dependencies
+npm update ( --save-dev / --save )</code></pre>
+
+  <h3 id="angular-update-guide">Angular Update Guide</h3>
+  <p>
+    Of course we also have the <a href="https://angular.dev/update-guide" target="_blank">Angular Update Guide</a> available.
+    You can use this guide to get an initial idea of the work you need to do to upgrade between 2 major versions.
+    Each project is unique obviously, so the instructions that are given here are just to give you a head-start!
+  </p>
+
+  <h2 id="security">Security</h2>
+
+  <p>
+    As you might already know, Angular has build-in security protection against the most common
+    vulnerabilities.
+  </p>
+
+  <p>
+    And it sure ain’t security through obscurity! Because obviously, all parts of our FE code are always visible to any
+    visitor of the web application.
+  </p>
+  <p>
+    Angular does however protect us against attacks such as cross site scripting and cross site request forgery. And one
+    of the best ways to stay secure is by keeping up-to-date with your dependencies. But we got that covered already.
+  </p>
+
+  <p></p>
+
+  <h3 id="preventing-xss">Preventing Cross Site Scripting (XSS)</h3>
+
+  <p>
+    XSS is one of the most common attacks on the web.
+    It happens when attackers are able to execute injected code on your applications.
+  </p>
+
+  <p>
+    <a href="https://angular.dev/best-practices/security#direct-use-of-the-dom-apis-and-explicit-sanitization-calls" target="_blank">Angular treats all values as untrusted by default</a> and sanitises them when they are injected into the DOM or executed
+    as part of your JavaScript. So if there is an attack it most probably means the developer made it possible.
+  </p>
+  <p>
+    If you do need to inject content such as HTML or CSS or JS directly, you can use the <code>DomSanitizer</code> utility class
+    provided by Angular. Only do this if you are sure you are protected against XSS attacks through a different
+    mechanism. For example you have checks in place to escape any content before it gets injected into your database and returned
+    back to the browser.
+  </p>
+
+  <h4 class="codetitle">Using the Dom Sanitizer</h4>
+  <pre><code class="language-ts">import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeUrl } from '&#64;angular/platform-browser';
+
+&#64;Component({
+  standalone: true,
+  selector: 'my-component',
+  template: `&lt;div [outerHTML]=&quot;html&quot;&gt;&lt;/div&gt;
+&lt;script [src]=&quot;js&quot;&gt;&lt;/script&gt;
+&lt;a [href]=&quot;html&quot;&gt;SamV Website&lt;/a&gt;`,
+  })
+export class AppComponent {
+  url: SafeUrl;
+  js: SafeResourceUrl;
+  html: SafeHtml;
+  readonly #domSanitizer = inject(DomSanitizer);
+
+  constructor(){
+    this.url = this.#domSanitizer.bypassSecurityTrustUrl('https://samv.pro');
+    this.js = this.#domSanitizer.bypassSecurityTrustResourceUrl('https://samv.pro/code.js');
+    this.html = this.#domSanitizer.bypassSecurityTrustHtml('<h1>SamV</h1>');
+    /* And others like
+      - bypassSecurityTrustScript
+      - bypassSecurityTrustStyle
+     */
+  }
+}</code></pre>
+
+  <p>
+    In that case you can use libraries such as <a href="https://github.com/cure53/DOMPurify" target="_blank">DOMPurify</a> or <a
+    href="https://www.npmjs.com/package/sanitize-html" target="_blank">Sanitize HTML</a> to do the heavy lifting of
+    sanitising for you. Each modern framework in the backend space has a package available to handle that for you.
+  </p>
+  <p>
+    There are other and more detailed ways to protect yourself against these kinds of attacks, like <a
+    href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank">Content Security
+    Policy</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API" target="_blank">Trusted
+    Types</a>.
+  </p>
+
+  <h3 id="preventing-xsrf">Preventing Cross Site Request Forgery (XSRF)</h3>
+
+  <p>
+    There are 2 HTTP level vulnerabilities for which Angular has build-in prevention mechanisms. Cross Site Request Forgery (XSRF) and Cross Site Script Inclusion (XSSI).
+  </p>
+  <p>
+    In this article I will focus on XSRF as XSSI became irrelevant when Angular dropped support for non-modern browsers like Internet Explorer.
+    The XSSI attack has been made a lot harder by modern browsers by applying the <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">same origin policy</a> by default.
+  </p>
+  <p>
+    Cross Site Request Forgery can be easily mitigated by sending a nonce from the server in a cookie to the client and back to the server on request headers. The value has to be same or the request can be ignored.
+    This also works because of same origin policies, where other domains can’t read out this cookie.
+    Although this is mostly a server side technique, Angular has build in support for the client side part.
+    </p>
+
+  <h4 class="codetitle">Configuring XSRF in Angular</h4>
+  <pre><code class="language-ts">import {
+    provideHttpClient,
+    withNoXsrfProtection,
+    withXsrfConfiguration
+} from '&#64;angular/common/http';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideHttpClient(
+      // setup with custom cookie/header name
+      withXsrfConfiguration({
+        cookieName: 'MY-XSRF-TOKEN',
+        headerName: 'X-MY-XSRF-TOKEN',
+      }),
+      // OR; to complete disable it
+      withNoXsrfProtection()
+    ),
+  ]
+})	</code></pre>
+
+  <p>
+    Just use the <code>withXsrfConfiguration</code> function call to configure the HTTP client during bootstrap of your application.
+    You can provide your own cookie and header names if you wish to override the default names.
+  </p>
+
+  <h3 id="google-bug-hunting-community">Google's Bug Hunting Community</h3>
+
+  <p>
+    And if you do find a security bug that is related to the framework directly, you might get yourself a nice bonus. Because Angular is part of the Google Open Source Software Vulnerability Reward.
+    So if you believe to have found a major issue, be sure to <a href="https://bughunters.google.com/report" target="_blank">report it</a>!
+  </p>
+
+  <h2 id="a11y">Accessibility - a11y</h2>
+
+  <p>
+    There is a lot to be said about accessibility on the web. And obviously, for Angular this is not much different.
+    But there are specific things to consider when improving the accessibility of your Angular applications.
+  </p>
+
+  <h3 id="applying-aria-attributes">Apply aria attributes</h3>
+
+  <p>
+    The first thing you can do is elevate your applications with aria attributes.
+    I am not going to go over the entire specification of ARIA and its potential. But I will give you a few examples.
+  </p>
+
+  <h4 class="codetitle">aria-live example in Angular</h4>
+  <pre><code class="language-html">&lt;div class=&quot;toasts-wrapper&quot; aria-live=&quot;polite&quot;&gt;
+  @for (let toast of toasts) {
+    &lt;my-toast [config]=&quot;toast&quot; /&gt;
+  }
+&lt;/div&gt;</code></pre>
+
+  <p>
+    <code>aria-live</code> is an attribute you can use to indicate to screen readers that whatever is in this block is
+    likely to change over time or because of user interaction. Whenever the user is idle it will speak out the changes
+    that occurred in that block. In the example above the toasts wrapper contains a list of toasts that might change because
+    of user interaction.
+  </p>
+  <p>
+    Another perhaps more well known example is <code>aria-label</code>. In the second code example below, the button has no textual
+    content, but an SVG representing a cross to indicate that this button is used to close something. A screen reader
+    can’t interpret the SVG so the <code>aria-label</code> indicates its meaning in full text.
+  </p>
+
+  <h4 class="codetitle">aria-label and aria-hidden example in Angular</h4>
+  <pre><code class="language-html">&lt;button aria-label=&quot;Close&quot;&gt;
+  &lt;svg
+    aria-hidden=&quot;true&quot;
+    focusable=&quot;false&quot;&gt;
+    &lt;path ... /&gt;
+  &lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+
+  <p>
+    In Angular it’s important to use the <code>[attr.]</code> prefix whenever you want to bind dynamic values to aria attributes. Obviously you only need to use this <code>[attr.]</code> prefix if you have dynamic values.
+    In all other cases you can just use the <code>aria-label</code> attribute without the prefix.
+  </p>
+
+  <h4 class="codetitle">dynamic binding of aria attributes</h4>
+<pre><code class="language-html">&lt;form&gt;
+  &lt;input type=&quot;email&quot; required [(ngModel)]=&quot;email&quot;
+       [attr.aria-describedby]=&quot;currentError ? ('email-' + currentError) : null&quot; /&gt;
+  &lt;div aria-live=&quot;polite&quot;&gt;
+    &lt;div id=&quot;email-required&quot; class=&quot;error&quot; *ngIf=&quot;currentError === 'required'&quot;&gt;
+      Email is required
+    &lt;/div&gt;
+    &lt;div id=&quot;email-invalid&quot; class=&quot;error&quot; *ngIf=&quot;currentError === 'invalid'&quot;&gt;
+      Email is invalid
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+
+  <p></p>
+
+  <h3 id="live-announcer">Use the live announcer</h3>
+
+  <p>
+    If you want more control beyond HTML markup in your application code to announce updates, you can also use the <code>LiveAnnouncer</code> provided by the Angular CDK.
+    The Live announcer uses similar techniques as with the <code>aria-live</code> attribute but will handle that magic for you underneath.
+    You only need to call its API to make sure the screen reader reads your messages out loud.
+  </p>
+
+  <h4 class="codetitle">angular cdk live announcer</h4>
+  <pre><code class="language-ts">import { LiveAnnouncer } from '&#64;angular/cdk/a11y';
+
+&#64;Component({...})
+export class FormComponent {
+  #liveAnnouncer = inject(LiveAnnouncer);
+
+  public validateForm(): void {
+    if (formInvalid) {
+      this.liveAnnouncer.announce(
+        "The form was validated with the following errors:..."
+      );
+    }
+  }
+}</code></pre>
+
+  <h3 id="augmenting-native-elements">Augmenting native elements</h3>
+
+  <p>
+    Another very important implementation error that I have seen multiple times in consulting on projects is that developers are trying to
+    reinvent the wheel. And it mostly resolves around buttons.
+  </p>
+  <p>
+    The general advice and best practise is to avoid creating your own elements if the native elements are already
+    handling a lot of the hard accessibility work for you in the browser. If you wish to improve native elements or augment their behavior, use directives instead of your own components.
+  </p>
+
+  <p>
+    If you would like to augment the behavior of a button, for example to react on tripple clicks and some custom style variants, augment the button with a directive, instead of creating a custom component that tries to mimic the full behavior of a native HTML button.
+  </p>
+
+  <h4 class="codetitle">❌ bad example</h4>
+  <pre><code class="language-html">&lt;my-button [disabled]=&quot;disabled&quot;
+  label=&quot;Click here&quot;
+  variant=&quot;info&quot;
+  aria-role=&quot;button&quot;
+  type=&quot;button&quot;&gt;
+&lt;/my-button&gt;</code></pre>
+
+  <h4 class="codetitle">✅ good example</h4>
+  <pre><code class="language-html">&lt;button [disabled]=&quot;disabled&quot;
+  myButton
+  variant=&quot;info&quot;
+  type=&quot;button&quot;&gt;
+   Click here
+&lt;/button&gt;</code></pre>
+
+  <p>
+    Good examples of this best practice can be found in the <code>&#64;angular/material</code> project.
+    Go checkout the implementation of the material button or table components to find out how the Angular team does it.
+  </p>
+
+  <h3 id="identify-active-links">Identify active links</h3>
+
+  <p>
+    Another hidden gem in the Angular router package is the <code>ariaCurrentWhenActive</code> directive.
+    Although it’s <a href="https://angular.dev/best-practices/a11y#active-links-identification" target="_blank">clearly documented</a> I have not seen much usage of it before.
+  </p>
+
+  <h4 class="codetitle">current page indicators</h4>
+  <pre><code class="language-html">&lt;nav&gt;
+  &lt;a routerLink=&quot;home&quot;
+     routerLinkActive=&quot;active-page&quot;
+     ariaCurrentWhenActive=&quot;page&quot;&gt;
+    Home
+  &lt;/a&gt;
+  &lt;a routerLink=&quot;about&quot;
+     routerLinkActive=&quot;active-page&quot;
+     ariaCurrentWhenActive=&quot;page&quot;&gt;
+    About
+  &lt;/a&gt;
+  ...
+&lt;/nav&gt;</code></pre>
+
+  <p>
+    In the example above I have used it to indicate that the navigation links are representing the current page when they are active.
+    In the other example, below, we can indicate which step is currently active when going through a step by step process.
+  </p>
+
+  <h4 class="codetitle">current step indicators</h4>
+  <pre><code class="language-html">&lt;nav class=&quot;step-nav&quot;&gt;
+  &lt;a routerLink=&quot;step/1&quot;
+	 class=&quot;step-nav__step&quot;
+     routerLinkActive=&quot;step-nav__step--active&quot;
+     ariaCurrentWhenActive=&quot;step&quot;&gt;
+    Step 1
+  &lt;/a&gt;
+  &lt;a routerLink=&quot;step/2&quot;
+	 class=&quot;step-nav__step&quot;
+     routerLinkActive=&quot;step-nav__step--active&quot;
+     ariaCurrentWhenActive=&quot;step&quot;&gt;
+    Step 2
+  &lt;/a&gt;
+  ...
+&lt;/nav&gt;</code></pre>
+
+  <h3 id="tracking-controlling-focus">Tracking & controlling focus</h3>
+
+  <p>
+    The next tip is about focussing on navigation. As a developer you should decide where focus goes after page
+    navigation. To achieve that, you can use the <code>NavigationEnd</code> event of the router to reclaim or update focus.
+  </p>
+
+  <h4 class="codetitle">current step indicators</h4>
+  <pre><code class="language-ts">inject(Router).events.pipe(
+  filter(e => e instanceof NavigationEnd)
+).subscribe(() => {
+  const content = document.querySelector('.content');
+  if (content) {
+    content.focus();
+  }
+});</code></pre>
+
+  <p>
+    The goal of this technique is to avoid focus on the first element of the body again and to make sure your loaded
+    content is usable right away.
+  </p>
+
+  <p>
+    And to stay in the context of focus, another one of my favorites is trapping the focus. With this simple <code>cdkTrapFocus</code>
+    directive it’s easy to keep focus bound to the context, for example when opening a dialog or a detail flyout.
+  </p>
+
+  <h4 class="codetitle">trap the focus</h4>
+  <pre><code class="language-html">&lt;div class=&quot;my-inner-dialog-content&quot; cdkTrapFocus&gt;
+  &lt;!-- Tab and Shift + Tab will --&gt;
+  &lt;!-- not leave this element. --&gt;
+&lt;/div&gt;</code></pre>
+
+  <p>
+    If you want more control, the Angular CDK also exposes directives to specifically mark the end and start of a focus
+    region and to specify which element should receive the initial focus
+  </p>
+
+  <h4 class="codetitle">more focus controls</h4>
+  <pre><code class="language-html">&lt;nav class=&quot;pagination&quot;&gt;
+  &lt;a href=&quot;#start&quot; cdkFocusRegionStart&gt;Start&lt;/a&gt;
+  &lt;a href=&quot;#previous&quot;&gt;Previous&lt;/a&gt;
+  &lt;a href=&quot;#current&quot; cdkFocusInitial&gt;Current&lt;/a&gt;
+  &lt;a href=&quot;#next&quot;&gt;Next&lt;/a&gt;
+  &lt;a href=&quot;#end&quot; cdkFocusRegionEnd&gt;End&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+
+  <h2 id="conclusion">Conclusion</h2>
+
+  <p>In this article we discussed 3 big topics of best practices in Angular, or in general applicable to any web
+    project. The first one is to make sure you can keep upgrading your applications to follow with the LTS version of
+    Angular. By not doing so you might miss up on important security updates.</p>
+  <p>Next to that there are some build-in framework security features like automatic sanitizing of content and
+    protecting against the most known security threats when communicating data over the internet like XSRF and XSS.</p>
+  <p>Finally, we learned about ways to optimize our applications for all users and making them accessible for most by applying aria attributes and controlling focus where needed.</p>
+
+  <h2 id="further-reading">Further reading</h2>
+
+  <ol class="post__further-reading">
+    <li>
+      <a
+        href="https://nx.dev/nx-api/nx/documents/migrate"
+        target="_blank"
+        rel="noopener"
+      >
+        Migrations in NX
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://docs.npmjs.com/cli/v10/commands/npm-outdated"
+        target="_blank"
+        rel="noopener"
+      >
+        NPM outdated
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://docs.npmjs.com/cli/v10/commands/npm-update"
+        target="_blank"
+        rel="noopener"
+      >
+        NPM update
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://www.w3.org/WAI/standards-guidelines/wcag/"
+        target="_blank"
+        rel="noopener"
+      >
+        WCAG 2 Overview
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://bytearcher.com/articles/semver-explained-why-theres-a-caret-in-my-package-json"
+        target="_blank"
+        rel="noopener"
+      >
+       Why is there a caret in my package.json?
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions"
+        target="_blank"
+        rel="noopener"
+      >
+        ARIA Live regions
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://angular.io/guide/accessibility#augmenting-native-elements"
+        target="_blank"
+        rel="noopener"
+      >
+        Augmenting Native Elements
+      </a>
+    </li>
+  </ol>
+</section>

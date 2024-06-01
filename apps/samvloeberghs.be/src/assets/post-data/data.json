@@ -1,5 +1,14 @@
 [
   {
+    "title": "Timeless Angular Best Practices",
+    "slug": "timeless-angular-best-practices",
+    "publishDatetime": "2024-06-01T12:00:00+02:00",
+    "author": "Sam Vloeberghs",
+    "img": "/assets/share/posts/angular.png",
+    "imgShare": "/assets/share/posts/angular_share.jpg",
+    "short": "What are some of the best practices in Angular? And why should you care about them? In this blog we will discuss timeless best practices that are applicable to any Angular project."
+  },
+  {
     "title": "Migrating Angular v17+ to signal inputs, signal outputs, control flow and more",
     "slug": "migrating-angular-v17-plus-to-signal-inputs-outputs-control-flow-and-more",
     "publishDatetime": "2024-05-13T22:00:00+02:00",
