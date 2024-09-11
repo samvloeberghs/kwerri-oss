@@ -44,3 +44,4 @@ Thumbs.db
 .netlify
 
 .nx/cache
+.nx/workspace-data
