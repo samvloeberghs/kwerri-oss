@@ -12,7 +12,7 @@
 npx ng g &#64;angular/core:control-flow --path=libs/feature-xyz</code></pre>
 
   <pre><code class="language-bash">npx ng add ngxtension</code></pre>
-  
+
   <h4 class="codetitle">Signal inputs migration command</h4>
   <pre><code class="language-bash">npx ng g ngxtension:convert-signal-inputs
 npx ng g ngxtension:convert-signal-inputs --path=libs/feature-xyz/my-component.component.ts
@@ -28,10 +28,14 @@ npx ng g ngxtension:convert-outputs --project=feature-xyz</code></pre>
 npx ng g ngxtension:convert-queries --path=libs/feature-xyz/my-component.component.ts
 npx ng g ngxtension:convert-queries --project=feature-xyz</code></pre>
 
-  <h4 class="codetitle">Inject function migration command</h4>
+  <h4 class="codetitle">Inject function migration command (ngxtension)</h4>
   <pre><code class="language-bash">npx ng g ngxtension:convert-di-to-inject
 npx ng g ngxtension:convert-di-to-inject --path==libs/feature-xyz/my-component.component.ts
 npx ng g ngxtension:convert-di-to-inject --project==feature-xyz</code></pre>
+
+  <h4 class="codetitle">Inject function migration command (Angular)</h4>
+  <pre><code class="language-bash">npx ng generate &#64;angular/core:inject-migration
+npx ng generate &#64;angular/core:inject-migration --path==libs/feature-xyz</code></pre>
 
   <h2 id="target-audience">Target audience</h2>
 
@@ -344,7 +348,7 @@ npx ng g ngxtension:convert-queries --project=feature-xyz</code></pre>
     provided manually. To run the migration we can again leverage the <code>ngxtension</code> library:
   </p>
 
-  <h4 class="codetitle">Inject function migration command</h4>
+  <h4 class="codetitle">Inject function migration command (ngxtension)</h4>
   <pre><code class="language-bash">npx ng g ngxtension:convert-di-to-inject
 npx ng g ngxtension:convert-di-to-inject --path==libs/feature-xyz/my-component.component.ts
 npx ng g ngxtension:convert-di-to-inject --project==feature-xyz</code></pre>
@@ -358,6 +362,13 @@ npx ng g ngxtension:convert-di-to-inject --project==feature-xyz</code></pre>
   public readonly stateService = inject(StateService);
 }</code></pre>
 
+  <p class="alert alert--info">
+    <strong>Update (September 2024):</strong> Because of popular demand, the Angular team created a <a href="https://angular.dev/reference/migrations/inject-function#" target="_blank" rel="noopener">native migration for the inject function</a>.
+  </p>
+
+  <h4 class="codetitle">Inject function migration command (Angular)</h4>
+  <pre><code class="language-bash">npx ng generate &#64;angular/core:inject-migration
+npx ng generate &#64;angular/core:inject-migration --path==libs/feature-xyz</code></pre>
 
   <h2 id="conclusion">Conclusion</h2>
 
@@ -390,11 +401,20 @@ npx ng g ngxtension:convert-di-to-inject --project==feature-xyz</code></pre>
     </li>
     <li>
       <a
+        href="https://angular.dev/reference/migrations/inject-function#"
+        target="_blank"
+        rel="noopener"
+      >
+        inject() Migration (Angular native)
+      </a>
+    </li>
+    <li>
+      <a
         href="https://ngxtension.netlify.app/utilities/migrations/inject-migration/"
         target="_blank"
         rel="noopener"
       >
-        inject() Migration
+        inject() Migration (ngxtension)
       </a>
     </li>
     <li>
